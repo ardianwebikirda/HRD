@@ -1,0 +1,365 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.1.13
+-- Dumped by pg_dump version 9.1.13
+-- Started on 2014-06-23 17:05:32 WIB
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 165 (class 3079 OID 11679)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1945 (class 0 OID 0)
+-- Dependencies: 165
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- TOC entry 177 (class 1255 OID 181149)
+-- Dependencies: 502 5
+-- Name: get_uuid(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION get_uuid() RETURNS character varying
+    LANGUAGE plpgsql
+    AS $$ DECLARE
+
+var VARCHAR:=uuid_generate_v4();
+BEGIN
+ WHILE var=uuid_generate_v4()::varchar LOOP
+END LOOP; 
+  return replace(upper(uuid_generate_v4()::varchar),'-','');
+END;   $$;
+
+
+ALTER FUNCTION public.get_uuid() OWNER TO postgres;
+
+--
+-- TOC entry 178 (class 1255 OID 181150)
+-- Dependencies: 5
+-- Name: uuid_generate_v4(); Type: FUNCTION; Schema: public; Owner: hrdusr
+--
+
+CREATE FUNCTION uuid_generate_v4() RETURNS uuid
+    LANGUAGE c STRICT
+    AS '$libdir/uuid-ossp', 'uuid_generate_v4';
+
+
+ALTER FUNCTION public.uuid_generate_v4() OWNER TO hrdusr;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 162 (class 1259 OID 181296)
+-- Dependencies: 1802 1803 1804 1805 1806 1807 5
+-- Name: ad_menu; Type: TABLE; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+CREATE TABLE ad_menu (
+    ad_menu_id integer DEFAULT 0 NOT NULL,
+    name character varying(32) NOT NULL,
+    parent integer DEFAULT 0 NOT NULL,
+    icon character varying(32) NOT NULL,
+    selector character varying(100) NOT NULL,
+    cls character varying(100) NOT NULL,
+    leaf boolean DEFAULT false,
+    description character(255),
+    isactive character(1) DEFAULT 'Y'::bpchar NOT NULL,
+    created timestamp without time zone DEFAULT now() NOT NULL,
+    createdby character varying(32) NOT NULL,
+    updated timestamp without time zone DEFAULT now() NOT NULL,
+    updatedby character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.ad_menu OWNER TO hrdusr;
+
+--
+-- TOC entry 164 (class 1259 OID 181341)
+-- Dependencies: 1816 1817 1818 5
+-- Name: ad_role; Type: TABLE; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+CREATE TABLE ad_role (
+    ad_role_id character varying(32) NOT NULL,
+    ad_user_id character varying(32),
+    name character varying(32),
+    description character(255),
+    isactive character(1) DEFAULT 'Y'::bpchar NOT NULL,
+    created timestamp without time zone DEFAULT now() NOT NULL,
+    createdby character varying(32) NOT NULL,
+    updated timestamp without time zone DEFAULT now() NOT NULL,
+    updatedby character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.ad_role OWNER TO hrdusr;
+
+--
+-- TOC entry 163 (class 1259 OID 181320)
+-- Dependencies: 1808 1809 1810 1811 1812 1813 1814 1815 5
+-- Name: ad_role_menu; Type: TABLE; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+CREATE TABLE ad_role_menu (
+    ad_role_menu_id character varying(32) NOT NULL,
+    ad_role_id character varying(32) NOT NULL,
+    ad_menu_id integer DEFAULT 0 NOT NULL,
+    iscreate character(1) DEFAULT 'Y'::bpchar NOT NULL,
+    isupdate character(1) DEFAULT 'Y'::bpchar NOT NULL,
+    isdelete character(1) DEFAULT 'Y'::bpchar NOT NULL,
+    isprocess character(1) DEFAULT 'Y'::bpchar NOT NULL,
+    isactive character(1) DEFAULT 'Y'::bpchar NOT NULL,
+    created timestamp without time zone DEFAULT now() NOT NULL,
+    createdby character varying(32) NOT NULL,
+    updated timestamp without time zone DEFAULT now() NOT NULL,
+    updatedby character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.ad_role_menu OWNER TO hrdusr;
+
+--
+-- TOC entry 161 (class 1259 OID 181283)
+-- Dependencies: 1799 1800 1801 5
+-- Name: ad_user; Type: TABLE; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+CREATE TABLE ad_user (
+    ad_user_id character varying(32) NOT NULL,
+    ad_role_id character varying(32),
+    name character varying(60) NOT NULL,
+    firstname character varying(60),
+    lastname character varying(60),
+    username character varying(60) NOT NULL,
+    description character varying(255),
+    password character varying(60),
+    email character varying(40),
+    phone character varying(40),
+    phone2 character varying(40),
+    isactive character(1) DEFAULT 'Y'::bpchar NOT NULL,
+    created timestamp without time zone DEFAULT now() NOT NULL,
+    createdby character varying(32) NOT NULL,
+    updated timestamp without time zone DEFAULT now() NOT NULL,
+    updatedby character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.ad_user OWNER TO hrdusr;
+
+--
+-- TOC entry 1935 (class 0 OID 181296)
+-- Dependencies: 162 1938
+-- Data for Name: ad_menu; Type: TABLE DATA; Schema: public; Owner: hrdusr
+--
+
+COPY ad_menu (ad_menu_id, name, parent, icon, selector, cls, leaf, description, isactive, created, createdby, updated, updatedby) FROM stdin;
+1	General Setup	0	icon-folder			f	                                                                                                                                                                                                                                                               	Y	2014-06-16 13:39:26.930578	100	2014-06-16 13:39:26.930578	100
+101	Users	1	icon-folder	Users	HRIS.module.GeneralSetup.view.Users	t	                                                                                                                                                                                                                                                               	Y	2014-06-16 13:39:26.930578	100	2014-06-16 13:39:26.930578	100
+102	Role	1	icon-folder	Role	HRIS.module.GeneralSetup.view.Role	t	                                                                                                                                                                                                                                                               	Y	2014-06-16 13:39:26.930578	100	2014-06-16 13:39:26.930578	100
+4	er	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:06:21	100	2014-06-17 17:06:21	100
+8	wer	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:06:31	100	2014-06-17 17:06:31	100
+9	errtt	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:06:44	100	2014-06-17 17:06:44	100
+10	thtrh	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:06:52	100	2014-06-17 17:06:52	100
+103	Modul	1	icon-folder	Modul	HRIS.module.GeneralSetup.view.Modul	t	                                                                                                                                                                                                                                                               	Y	2014-06-16 13:39:26.930578	100	2014-06-16 17:07:12	100
+2	w	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:06:00	100	2014-06-17 17:06:00	100
+3	e	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:06:14	100	2014-06-17 17:06:14	100
+11	rgg	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:06:59	100	2014-06-17 17:06:59	100
+12	fgh	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:07:06	100	2014-06-17 17:07:06	100
+13	dfhh	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:07:13	100	2014-06-17 17:07:13	100
+14	dfg	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:07:20	100	2014-06-17 17:07:20	100
+15	jj	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:07:30	100	2014-06-17 17:07:30	100
+16	yhh	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:07:37	100	2014-06-17 17:07:37	100
+17	uy	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:07:44	100	2014-06-17 17:07:44	100
+18	jjh	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:07:51	100	2014-06-17 17:07:51	100
+19	gfgds	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:07:59	100	2014-06-17 17:07:59	100
+20	kk	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:08:06	100	2014-06-17 17:08:06	100
+21	kkrt	0				f	                                                                                                                                                                                                                                                               	Y	2014-06-17 17:08:21	100	2014-06-17 17:08:21	100
+\.
+
+
+--
+-- TOC entry 1937 (class 0 OID 181341)
+-- Dependencies: 164 1938
+-- Data for Name: ad_role; Type: TABLE DATA; Schema: public; Owner: hrdusr
+--
+
+COPY ad_role (ad_role_id, ad_user_id, name, description, isactive, created, createdby, updated, updatedby) FROM stdin;
+100	100	Administrator	                                                                                                                                                                                                                                                               	Y	2014-06-16 13:40:59.40803	100	2014-06-16 13:40:59.40803	100
+95AFA3DEE59C45C4A79309195E351F55	\N	5e	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:59:38	100	2014-06-18 08:59:38	100
+E0FF1DA310234CBFB055DDB2FE4292E6	\N	sj	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:59:48	100	2014-06-18 08:59:48	100
+0EA332CCD3A846688CDCF875E4EF5453	\N	mnf	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:59:54	100	2014-06-18 08:59:54	100
+18D83AE23F554229A9F0215BED8C42E6	\N	Staff	                                                                                                                                                                                                                                                               	Y	2014-06-17 13:25:44	100	2014-06-17 13:25:44	100
+81E17736C25044A5A33EC2DC6570E1D8	\N	Purchase	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:58:25	100	2014-06-18 08:58:25	100
+BFEF8BA20E4E424BA133A6829A270EC3	\N	we	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:58:30	100	2014-06-18 08:58:30	100
+3139E06F28BF42D8B410106CE47501DE	\N	rg	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:58:39	100	2014-06-18 08:58:39	100
+527272FB862C4B2D9DC28EB825156E0D	\N	fgg	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:58:44	100	2014-06-18 08:58:44	100
+2FE026F515914AFE97430188B11F4EE7	\N	rge	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:58:49	100	2014-06-18 08:58:49	100
+5C395F7CFAED448AB74A153955F6D502	\N	jk	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:59:02	100	2014-06-18 08:59:02	100
+BAEE13481072411B9BE8BD8CE707E950	\N	gg	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:59:08	100	2014-06-18 08:59:08	100
+65D4C065C1E349D19AF8886583295B37	\N	ut	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:59:14	100	2014-06-18 08:59:14	100
+4A56785F407B4FD8A8FC291BFDF307E1	\N	kr	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:59:21	100	2014-06-18 08:59:21	100
+844BF4E46EB44581BAA443552386CE13	\N	my	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:59:28	100	2014-06-18 08:59:28	100
+649B02A72F4D4834BAAE2E09CC53909E	\N	mm	                                                                                                                                                                                                                                                               	Y	2014-06-18 08:59:33	100	2014-06-18 08:59:33	100
+A456C501489546ADAD2B96DD742A2DDA	\N	qw	                                                                                                                                                                                                                                                               	Y	2014-06-18 09:00:04	100	2014-06-18 09:00:04	100
+A858BC072BC64B8BAD3C74A5607388FB	\N	kk	                                                                                                                                                                                                                                                               	Y	2014-06-18 09:00:12	100	2014-06-18 09:00:12	100
+F0CFFB1485874C6395AEBCF68A607846	\N	tt	                                                                                                                                                                                                                                                               	Y	2014-06-18 09:00:21	100	2014-06-18 09:00:21	100
+ACE3675B98184F079C862FA24469B495	\N	ytd	                                                                                                                                                                                                                                                               	Y	2014-06-18 09:00:30	100	2014-06-18 09:00:30	100
+E5C017A222DD43E3B78C54A4C1522587	\N	fd	test                                                                                                                                                                                                                                                           	Y	2014-06-18 08:58:56	100	2014-06-19 13:50:56	100
+\.
+
+
+--
+-- TOC entry 1936 (class 0 OID 181320)
+-- Dependencies: 163 1938
+-- Data for Name: ad_role_menu; Type: TABLE DATA; Schema: public; Owner: hrdusr
+--
+
+COPY ad_role_menu (ad_role_menu_id, ad_role_id, ad_menu_id, iscreate, isupdate, isdelete, isprocess, isactive, created, createdby, updated, updatedby) FROM stdin;
+100	100	1	Y	Y	Y	Y	Y	2014-06-16 13:55:18.205352	100	2014-06-16 13:55:18.205352	100
+101	100	101	Y	Y	Y	Y	Y	2014-06-16 13:55:18.205352	100	2014-06-16 13:55:18.205352	100
+102	100	102	Y	Y	Y	Y	Y	2014-06-16 13:55:18.205352	100	2014-06-16 13:55:18.205352	100
+103	100	103	Y	Y	Y	Y	Y	2014-06-16 13:55:18.205352	100	2014-06-16 13:55:18.205352	100
+AE6A4CADC6C14F68B8F739CE7F9F344C	D31587482D1843E685E9ADABDA3B52F4	101	N	N	N	N	N	2014-06-17 09:58:14	100	2014-06-17 09:58:14	100
+\.
+
+
+--
+-- TOC entry 1934 (class 0 OID 181283)
+-- Dependencies: 161 1938
+-- Data for Name: ad_user; Type: TABLE DATA; Schema: public; Owner: hrdusr
+--
+
+COPY ad_user (ad_user_id, ad_role_id, name, firstname, lastname, username, description, password, email, phone, phone2, isactive, created, createdby, updated, updatedby) FROM stdin;
+100	100	Administrator			admin		i4qXV2zwpEuDzNF8Sej/B0180fQ=				Y	2014-06-16 13:39:09.255342	100	2014-06-16 13:39:09.255342	100
+55A65FD43BBA427B9301B37FEBF48F67		Staff	Staff	Admin	staff		QL0AFWMIX8NRZTKeof9cXsvbvu8=				Y	2014-06-16 16:28:39	100	2014-06-16 16:28:39	100
+3A5EC2317BA14EBC9421A86C3F3B70E3	18D83AE23F554229A9F0215BED8C42E6	Tiara	Listi	Ara	tiara		QL0AFWMIX8NRZTKeof9cXsvbvu8=				Y	2014-06-16 16:36:46	100	2014-06-17 13:25:59	100
+A8CCF740BA824D1EB37BABF76D4A03AD		Yudi Rukmonon	Yudi	Rukmonon	rukmonon		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:36:55	0	2014-06-17 16:36:55	0
+00F994D227684E759BFA468528B61942		Soyuz	Soyuz	Monon	soyuz		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:37:16	0	2014-06-17 16:37:16	0
+89B66DC5BA934332BCBE902F9F4CADA7		Ardian	Ardian	Wibi	ardian		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:37:40	0	2014-06-17 16:37:40	0
+6F4E04A5C6C94420811E3580884DDCCD		Roni			roni		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:38:05	0	2014-06-17 16:38:05	0
+04F0FBF935CA42F897E572F4E06EECF6		Sofyan			Sofyan		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:38:37	0	2014-06-17 16:38:37	0
+B935B92CC78247DCACE3EB291DD42F2A		Monik			monik		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:38:58	0	2014-06-17 16:38:58	0
+CFA83FA4097C41758E09C7D42DD9F80A		Mamat			mamat		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:39:58	0	2014-06-17 16:39:58	0
+01BCF76E95F341D884D8075C8A74CA8D		Resi			resi		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:40:16	0	2014-06-17 16:40:16	0
+527A77984C9E43A29D8D94C772F865AE		Lala			lala		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:40:35	0	2014-06-17 16:40:35	0
+0888AE1090A04A02B8C2A8C17EAFFFC8		Hari			hari		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:50:26	0	2014-06-17 16:50:26	0
+6E356962E8584AC0A459FE1AF1621D2E		Maslah			maslah		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:50:38	0	2014-06-17 16:50:38	0
+E3CF386B2E8B4F78ACE42A6C5736A1B8		Norman			norman		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:50:49	0	2014-06-17 16:50:49	0
+9E9162383FBE4F6285886616E3A2B68C		Jony			jony		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:51:08	0	2014-06-17 16:51:08	0
+3EAF18EB34D24CCE8F5C1FA7216619C2		Heru	Heru	Lelono	heru		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:51:26	0	2014-06-17 16:51:26	0
+4A9EF57BE08C4BAEAB30FB6C44AB85F0		komar			kokom		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:51:45	0	2014-06-17 16:51:45	0
+1DB4666E40C84C02A3603CC99A224F7C		Sumiati			sumi		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:52:07	0	2014-06-17 16:52:07	0
+D3BDE37B31ED46DE8D8CEF37F40382A2		Wira Handoko			wira		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:52:26	0	2014-06-17 16:52:26	0
+735902CAD7F146A088D5D3FDBC5403A2		Bryan			bryan		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:52:53	0	2014-06-17 16:52:53	0
+C065B7D52279476DBC9575C33F62167F		Cucum			cucum		2jmj7l5rSw0yVb/vlWAYkK/YBwk=				Y	2014-06-17 16:53:21	0	2014-06-17 16:53:21	0
+\.
+
+
+--
+-- TOC entry 1824 (class 2606 OID 181309)
+-- Dependencies: 162 162 1939
+-- Name: ad_menu_key; Type: CONSTRAINT; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+ALTER TABLE ONLY ad_menu
+    ADD CONSTRAINT ad_menu_key PRIMARY KEY (ad_menu_id);
+
+
+--
+-- TOC entry 1830 (class 2606 OID 181348)
+-- Dependencies: 164 164 1939
+-- Name: ad_role_key; Type: CONSTRAINT; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+ALTER TABLE ONLY ad_role
+    ADD CONSTRAINT ad_role_key PRIMARY KEY (ad_role_id);
+
+
+--
+-- TOC entry 1828 (class 2606 OID 181332)
+-- Dependencies: 163 163 1939
+-- Name: ad_role_menu_key; Type: CONSTRAINT; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+ALTER TABLE ONLY ad_role_menu
+    ADD CONSTRAINT ad_role_menu_key PRIMARY KEY (ad_role_menu_id);
+
+
+--
+-- TOC entry 1820 (class 2606 OID 181293)
+-- Dependencies: 161 161 1939
+-- Name: ad_user_pkey; Type: CONSTRAINT; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+ALTER TABLE ONLY ad_user
+    ADD CONSTRAINT ad_user_pkey PRIMARY KEY (ad_user_id);
+
+
+--
+-- TOC entry 1832 (class 2606 OID 181350)
+-- Dependencies: 164 164 1939
+-- Name: name_role; Type: CONSTRAINT; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+ALTER TABLE ONLY ad_role
+    ADD CONSTRAINT name_role UNIQUE (name);
+
+
+--
+-- TOC entry 1826 (class 2606 OID 181311)
+-- Dependencies: 162 162 1939
+-- Name: name_un; Type: CONSTRAINT; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+ALTER TABLE ONLY ad_menu
+    ADD CONSTRAINT name_un UNIQUE (name);
+
+
+--
+-- TOC entry 1822 (class 2606 OID 181295)
+-- Dependencies: 161 161 1939
+-- Name: username_un; Type: CONSTRAINT; Schema: public; Owner: hrdusr; Tablespace: 
+--
+
+ALTER TABLE ONLY ad_user
+    ADD CONSTRAINT username_un UNIQUE (username);
+
+
+--
+-- TOC entry 1944 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2014-06-23 17:05:33 WIB
+
+--
+-- PostgreSQL database dump complete
+--
+
