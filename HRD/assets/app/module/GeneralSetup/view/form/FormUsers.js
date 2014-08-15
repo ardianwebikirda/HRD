@@ -34,22 +34,6 @@ Ext.define('HRIS.module.GeneralSetup.view.form.FormUsers', {
                     },
                     {
                         xtype       : 'textfield',
-                        name        : 'firstname',
-                        allowBlank  : false,
-                        fieldLabel  : 'Nama Depan',
-                        emptyText   : 'Name Depan',
-                        anchor      : '100%'
-                    },
-                    {
-                        xtype       : 'textfield',
-                        name        : 'lastname',
-                        allowBlank  : false,
-                        fieldLabel  : 'Nama Belakang',
-                        emptyText   : 'Name Belakang',
-                        anchor      : '100%'
-                    },
-                    {
-                        xtype       : 'textfield',
                         name        : 'username',
                         allowBlank  : false,
                         fieldLabel  : 'Username',
@@ -81,20 +65,6 @@ Ext.define('HRIS.module.GeneralSetup.view.form.FormUsers', {
                         name        : 'email',
                         fieldLabel  : 'Email',
                         emptyText   : 'Email',
-                        anchor      : '100%'
-                    },
-                    {
-                        xtype       : 'textfield',
-                        name        : 'phone',
-                        fieldLabel  : 'Telephone',
-                        emptyText   : 'Telephone',
-                        anchor      : '100%'
-                    },
-                    {
-                        xtype       : 'textfield',
-                        name        : 'mobile',
-                        fieldLabel  : 'No Handphone',
-                        emptyText   : 'No Handphone',
                         anchor      : '100%'
                     },
                     {

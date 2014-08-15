@@ -18,17 +18,14 @@ class C_users extends CI_Controller
 
     foreach ($result->result() as $key => $value) {
       $data['data'][] = array(        
-        'id'            => $value->id,        
+        'id'            => $value->id,  
+        'id_role'       => $value->id_role,        
         'name'          => $value->name,                
         'role'          => $value->role,                
         'username'      => $value->username,             
-        'firstname'     => $value->firstname,             
-        'lastname'      => $value->lastname,             
         'description'   => $value->description,             
         'email'         => $value->email,             
-        'phone'         => $value->phone,             
-        'isactive'      => $value->isactive,             
-        'mobile'        => $value->mobile        
+        'isactive'      => $value->isactive    
         );
     }
         $data['total']   = $count;
@@ -42,44 +39,18 @@ class C_users extends CI_Controller
     foreach($data as $row){
       $this->m_users->deleteUsers($row->id);
     }
-        $start      = ($this->input->post('start', TRUE) ? $this->input->post('start', TRUE) : 0);
-        $limit      = ($this->input->post('limit', TRUE) ? $this->input->post('limit', TRUE) : 20);  
-    $result = $this->m_users->getGridUsers($start,$limit);
-    $result1 = $this->m_users->countGridUsers();
-    $count = $result1->num_rows();
-
-    foreach ($result->result() as $key => $value) {
-      $data['data'][] = array(        
-        'id'            => $value->id,        
-        'name'          => $value->name,                
-        'role'          => $value->role,                
-        'username'      => $value->username,             
-        'firstname'     => $value->firstname,             
-        'lastname'      => $value->lastname,             
-        'description'   => $value->description,             
-        'email'         => $value->email,             
-        'phone'         => $value->phone,             
-        'isactive'      => $value->isactive,             
-        'mobile'        => $value->mobile        
-        );
-    }
-        $data['total'] = $count;
-        $data['success'] = TRUE;
-        echo json_encode($data);
+    
+    $this->getUsers();
   }
 
   public function saveUsers()
   {    
     $name         = ($this->input->post('name', TRUE) ? $this->input->post('name', TRUE) : '');
-    $firstname    = ($this->input->post('firstname', TRUE) ? $this->input->post('firstname', TRUE) : '');
-    $lastname     = ($this->input->post('lastname', TRUE) ? $this->input->post('lastname', TRUE) : '');
     $username     = ($this->input->post('username', TRUE) ? $this->input->post('username', TRUE) : '');
     $password1    = ($this->input->post('password', TRUE) ? $this->input->post('password', TRUE) : '');
     $password     = base64_encode(sha1($password1,TRUE));
     $email        = ($this->input->post('email', TRUE) ? $this->input->post('email', TRUE) : '');
-    $phone        = ($this->input->post('phone', TRUE) ? $this->input->post('phone', TRUE) : '');
     $role         = ($this->input->post('role', TRUE) ? $this->input->post('role', TRUE) : '');
-    $mobile       = ($this->input->post('mobile', TRUE) ? $this->input->post('mobile', TRUE) : '');
     $isactive1    = ($this->input->post('isactive', TRUE) ? $this->input->post('isactive', TRUE) : '');
     if($isactive1 == TRUE) { $isactive = 'Y'; } else { $isactive = 'N'; }
     $description  = ($this->input->post('description', TRUE) ? $this->input->post('description', TRUE) : '');
@@ -89,7 +60,7 @@ class C_users extends CI_Controller
     if($username == '' && $username == NULL){
       $success = 3;
     } else if($this->m_users->cekUser($username) == 0){ 
-      $this->m_users->saveUsers($name, $firstname, $lastname, $username, $password, $email, $phone, $mobile, $isactive, $description, $role, $uuid);
+      $this->m_users->saveUsers($name, $username, $password, $email, $isactive, $description, $role, $uuid);
       if($this->m_users->saveConfirm($uuid) == 0){ $success = 0; } else { $success = 1; }
     } else { $success = 2; }
         $data['total'] = $success;
@@ -101,19 +72,15 @@ class C_users extends CI_Controller
   {
     $id           = ($this->input->post('id', TRUE) ? $this->input->post('id', TRUE) : '');
     $name         = ($this->input->post('name', TRUE) ? $this->input->post('name', TRUE) : '');
-    $firstname    = ($this->input->post('firstname', TRUE) ? $this->input->post('firstname', TRUE) : '');
-    $lastname     = ($this->input->post('lastname', TRUE) ? $this->input->post('lastname', TRUE) : '');
     $username     = ($this->input->post('username', TRUE) ? $this->input->post('username', TRUE) : '');
     $email        = ($this->input->post('email', TRUE) ? $this->input->post('email', TRUE) : '');
-    $phone        = ($this->input->post('phone', TRUE) ? $this->input->post('phone', TRUE) : '');
-    $mobile       = ($this->input->post('mobile', TRUE) ? $this->input->post('mobile', TRUE) : '');
     $role         = ($this->input->post('role', TRUE) ? $this->input->post('role', TRUE) : '');
     if($this->input->post('isactive') == 'true') { $isactive = 'Y'; } else { $isactive = 'N'; }
     $description  = ($this->input->post('description', TRUE) ? $this->input->post('description', TRUE) : '');
 
     if($username == '' && $username == NULL){ $success = 3;
     } else if($this->m_users->cekUserID($username, $id) == 0){ 
-      $this->m_users->updateUsers($name, $firstname, $lastname, $username, $email, $phone, $mobile, $isactive, $description, $role, $id);
+      $this->m_users->updateUsers($name, $username, $email, $isactive, $description, $role, $id);
       $success = 1;
     } else { $success = 2; }
         $data['total'] = $success;
@@ -147,12 +114,11 @@ class C_users extends CI_Controller
     $result = $this->m_users->searchGridUsers($username);
     foreach ($result->result() as $key => $value) {
       $data['data'][] = array(        
-        'id'            => $value->id,        
+        'id'            => $value->id,
+        'id_role'       => $value->id_role,        
         'name'          => $value->name,                
         'username'      => $value->username,             
-        'firstname'     => $value->firstname,             
-        'lastname'      => $value->lastname,             
-        'email'         => $value->email,             
+        'email'         => $value->email            
        );
     }
         $data['success'] = TRUE;

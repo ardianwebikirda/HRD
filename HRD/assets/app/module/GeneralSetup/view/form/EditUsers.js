@@ -25,27 +25,20 @@ Ext.define('HRIS.module.GeneralSetup.view.form.EditUsers', {
                         fieldLabel  : 'ID',
                         anchor      : '100%',
                         hidden      : true
-                    },{
+                    },
+                    {
                         xtype       : 'textfield',
                         name        : 'name',
                         fieldLabel  : 'Nama',
                         anchor      : '100%'
-                    },{
-                        xtype       : 'textfield',
-                        name        : 'firstname',
-                        fieldLabel  : 'Nama Depan',
-                        anchor      : '100%'
-                    },{
-                        xtype       : 'textfield',
-                        name        : 'lastname',
-                        fieldLabel  : 'Nama Belakang',
-                        anchor      : '100%'
-                    },{
+                    },
+                    {
                         xtype       : 'textfield',
                         name        : 'username',
                         fieldLabel  : 'Username',
                         anchor      : '100%'
-                    },{                   
+                    },
+                    {                   
                         xtype       : 'combobox',
                         name        : 'role',
                         emptyText   : 'Role User',
@@ -55,28 +48,21 @@ Ext.define('HRIS.module.GeneralSetup.view.form.EditUsers', {
                         displayField: 'name',
                         valueField  : 'id',
                         anchor      : '100%'
-                    },{
+                    },
+                    {
                         xtype       : 'textfield',
                         name        : 'email',
                         fieldLabel  : 'Email',
                         anchor      : '100%'
-                    },{
-                        xtype       : 'textfield',
-                        name        : 'phone',
-                        fieldLabel  : 'Telephone',
-                        anchor      : '100%'
-                    },{
-                        xtype       : 'textfield',
-                        name        : 'mobile',
-                        fieldLabel  : 'No Handphone',
-                        anchor      : '100%'
-                    },{
+                    },
+                    {
                         xtype       : 'checkbox',
                         name        : 'isactive',
                         fieldLabel  : 'Aktif',
                         anchor      : '100%',
                         inputValue   : 'isactive'
-                    },{
+                    },
+                    {
                         xtype       : 'htmleditor',
                         name        : 'description',
                         fieldLabel  : 'Keterangan',

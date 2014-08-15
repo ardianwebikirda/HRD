@@ -144,7 +144,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var lname           = form.findField('lname').getValue();
         var username        = form.findField('username').getValue();
         var gender          = form.findField('gender').getValue();
-        var religion        = form.findField('religion').getValue();
+        var religion        = form.findField('id_religion').getValue();
         var bod_place       = form.findField('bod_place').getValue();
         var bod             = form.findField('bod').getValue();
         var marital_status  = form.findField('marital_status').getValue();
@@ -152,6 +152,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var id_education    = form.findField('id_education').getValue();
         var blood           = form.findField('blood').getValue();
         var photo           = form.findField('photo').getValue();
+        var address         = form.findField('address').getValue();
         var code            = form.findField('code').getValue();
         var id_company      = form.findField('id_company').getValue();
         var id_department   = form.findField('id_department').getValue();
@@ -160,8 +161,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var hire            = form.findField('hire').getValue();
         var expired         = form.findField('expired').getValue();
         var supervisor      = form.findField('supervisor').getValue();
-        var phone1          = form.findField('phone1').getValue();
-        var phone2          = form.findField('phone2').getValue();
+        var phone           = form.findField('phone').getValue();
         var mobile1         = form.findField('mobile1').getValue();
         var mobile2         = form.findField('mobile2').getValue();
         var email1          = form.findField('email1').getValue();
@@ -175,7 +175,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var isovertime      = form.findField('isovertime').getValue();
         var isresign        = form.findField('isresign').getValue();
         // console.log('hai');
-        console.log(fname, gender);
+        console.log(fname, gender, marital_status, noc, phone, tax);
         Ext.Ajax.request({
             url     : BASE_URL + 'MasterHR/c_employee/saveEmployee',
             method  : 'POST',
@@ -192,6 +192,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
                 id_education    : id_education,
                 blood           : blood,
                 photo           : photo,
+                address         : address,
                 code            : code,
                 id_company      : id_company,
                 id_department   : id_department,
@@ -200,8 +201,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
                 hire            : hire,
                 expired         : expired,
                 supervisor      : supervisor,
-                phone1          : phone1,
-                phone2          : phone2,
+                phone           : phone,
                 mobile1         : mobile1,
                 mobile2         : mobile2,
                 email1          : email1,

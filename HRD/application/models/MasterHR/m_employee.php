@@ -77,18 +77,82 @@ class M_employee extends CI_Model
     /*
     * Query untuk menyimpan data
     */
-    public function saveEmployee($code, $name, $logo, $isactive, $uuid)
+    public function saveEmployee($fname,
+          $lname,
+          $username,
+          $gender,
+          $religion,
+          $bod_place,
+          $bod,
+          $marital_status,
+          $noc,
+          $id_education,
+          $blood,
+          $photo,
+          $address,
+          $code,
+          $id_company,
+          $id_department,
+          $id_jobtitle,
+          $id_jobstatus,
+          $hire,
+          $expired,
+          $supervisor,
+          $phone,
+          $mobile1,
+          $mobile2,
+          $email1,
+          $email2,
+          $id_bank,
+          $bank_account,
+          $idcard_type,
+          $idcard_number,
+          $tax,
+          $isactive,
+          $isovertime,
+          $isresign, 
+          $uuid)
     {
-            $this->db->set('id_employee', $uuid);
-            $this->db->set('code', $code);
-            $this->db->set('name', $name);
-            $this->db->set('logo', $logo);
-            $this->db->set('isactive', $isactive);
-            $this->db->set('createdby', $this->session->userdata('id'));
-            $this->db->set('created', date('Y-m-d H:i:s'));
-            $this->db->set('updatedby', $this->session->userdata('id'));
-            $this->db->set('updated', date('Y-m-d H:i:s'));
-            $this->db->insert('sys_employee');
+        $this->db->set('id_employee', $uuid);
+        $this->db->set('fname', $fname);
+        $this->db->set('lname', $lname);
+        $this->db->set('username', $username);
+        $this->db->set('gender', $gender);
+        $this->db->set('id_religion', $religion);
+        $this->db->set('bod_place', $bod_place);
+        $this->db->set('bod', $bod);
+        $this->db->set('marital_status', $marital_status);
+        $this->db->set('noc', $noc);
+        $this->db->set('id_education', $id_education);
+        $this->db->set('blood', $blood);
+        $this->db->set('photo', $photo);
+        $this->db->set('address', $address);
+        $this->db->set('code', $code);
+        $this->db->set('id_company', $id_company);
+        $this->db->set('id_department', $id_department);
+        $this->db->set('id_jobtitle', $id_jobtitle);
+        $this->db->set('id_jobstatus', $id_jobstatus);
+        $this->db->set('hire', $hire);
+        $this->db->set('expired', $expired);
+        $this->db->set('supervisor', $supervisor);
+        $this->db->set('phone', $phone);
+        $this->db->set('mobile1', $mobile1);
+        $this->db->set('mobile2', $mobile2);
+        $this->db->set('email1', $email1);
+        $this->db->set('email2', $email2);
+        $this->db->set('id_bank', $id_bank);
+        $this->db->set('bank_account', $bank_account);
+        $this->db->set('idcard_type', $idcard_type);
+        $this->db->set('idcard_number', $idcard_number);
+        $this->db->set('tax', $tax);
+        $this->db->set('isactive', $isactive);
+        $this->db->set('isovertime', $isovertime);
+        $this->db->set('isresign', $isresign);
+        $this->db->set('createdby', $this->session->userdata('id'));
+        $this->db->set('created', date('Y-m-d H:i:s'));
+        $this->db->set('updatedby', $this->session->userdata('id'));
+        $this->db->set('updated', date('Y-m-d H:i:s'));
+        $this->db->insert('sys_employee');
     }
 
         /*
@@ -162,8 +226,8 @@ class M_employee extends CI_Model
     /*
     * Query untuk validasi data unique sebelum data disimpan
     */
-    public function cekEmployee($name){      
-        return $this->db->select('COUNT(*) AS id', FALSE)->from('sys_employee')->where('name',$name)->get()->row()->id;
+    public function cekEmployee($code){      
+        return $this->db->select('COUNT(*) AS id', FALSE)->from('sys_employee')->where('code',$code)->get()->row()->id;
     }
 
     /*

@@ -13,7 +13,7 @@ Ext.define('HRIS.module.MasterData.store.AllRegion', {
     proxy       : {
         type    : 'ajax',
         api     : {
-            read    : BASE_URL + 'MasterData/c_region/getRegion'
+            read    : BASE_URL + 'MasterData/c_region/searchRegion'
         },
         actionMethods   : {
             read    : 'POST'

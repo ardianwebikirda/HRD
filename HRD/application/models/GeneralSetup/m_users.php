@@ -9,8 +9,8 @@ public function __construct(){
     {
         // echo $limit.'-'.$offset;
         // exit();
-        $this->db->select("u.ad_user_id AS id, u.username AS username, u.name AS name, u.firstname AS firstname, r.name AS role,
-            u.lastname AS lastname, u.description AS description, u.email AS email, u.phone AS phone, u.phone2 AS mobile, u.isactive AS isactive,
+        $this->db->select("u.ad_user_id AS id, u.ad_role_id AS id_role, u.username AS username, u.name AS name, u.description AS description, 
+            u.email AS email,r.ad_role_id AS role, u.isactive AS isactive,
             CASE WHEN u.isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
         $this->db->from('ad_user u');
         $this->db->join('ad_role r','r.ad_role_id=u.ad_role_id','left');
@@ -23,8 +23,8 @@ public function __construct(){
     }
     public function countGridUsers()
     {
-        $this->db->select("u.ad_user_id AS id, u.username AS username, u.name AS name, u.firstname AS firstname, r.name AS role,
-            u.lastname AS lastname, u.description AS description, u.email AS email, u.phone AS phone, u.phone2 AS mobile, u.isactive AS isactive,
+        $this->db->select("u.ad_user_id AS id, u.ad_role_id AS id_role, u.username AS username, u.name AS name, u.description AS description, 
+            u.email AS email,r.ad_role_id AS role, u.isactive AS isactive,
             CASE WHEN u.isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
         $this->db->from('ad_user u');
         $this->db->join('ad_role r','r.ad_role_id=u.ad_role_id','left');
@@ -39,18 +39,14 @@ public function __construct(){
         $this->db->where('ad_user_id',$id);
         $this->db->delete('ad_user');
     }
-    public function saveUsers($name, $firstname, $lastname, $username, $password, $email, $phone, $mobile, $isactive, $description, $role, $uuid)
+    public function saveUsers($name, $username, $password, $email, $isactive, $description, $role, $uuid)
     {
             $this->db->set('ad_user_id', $uuid);
             $this->db->set('name', $name);
-            $this->db->set('firstname', $firstname);
-            $this->db->set('lastname', $lastname);
             $this->db->set('ad_role_id', $role);
             $this->db->set('username', $username);
             $this->db->set('password', $password);
             $this->db->set('email', $email);
-            $this->db->set('phone', $phone);
-            $this->db->set('phone2', $mobile);
             $this->db->set('isactive', $isactive);
             $this->db->set('description', $description);
             $this->db->set('createdby', $this->session->userdata('id'));
@@ -74,16 +70,12 @@ public function __construct(){
     public function cekPswd(){              
         return $this->db->select('password AS id', FALSE)->from('ad_user')->where('ad_user_id',$this->session->userdata('id'))->get()->row()->id;
     }
-    public function updateUsers($name, $firstname, $lastname, $username, $email, $phone, $mobile, $isactive, $description, $role, $id){
+    public function updateUsers($name, $username, $email, $isactive, $description, $role, $id){
             $data = array(
                            'name'           => $name,
-                           'firstname'      => $firstname,
-                           'lastname'       => $lastname,
                            'username'       => $username,
                            'ad_role_id'     => $role,
                            'email'          => $email,
-                           'phone'          => $phone,
-                           'phone2'         => $mobile,
                            'isactive'       => $isactive,
                            'description'    => $description,
                            'updated'        => date('Y-m-d H:i:s'),
@@ -103,15 +95,14 @@ public function __construct(){
     } 
     public function searchGridUsers($username)
     {
-      $this->db->select("u.ad_user_id AS id, u.username AS username, u.name AS name, u.firstname AS firstname, r.name AS role,
-            u.lastname AS lastname, u.description AS description, u.email AS email, u.phone AS phone, u.phone2 AS mobile, u.isactive AS isactive,
+      $this->db->select("u.ad_user_id AS id, u.ad_role_id AS id_role, u.username AS username, u.name AS name, u.description AS description, 
+            u.email AS email,r.ad_role_id AS role, u.isactive AS isactive,
             CASE WHEN u.isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
         $this->db->from('ad_user u');
         $this->db->join('ad_role r','r.ad_role_id=u.ad_role_id','left');
         $this->db->like('LOWER(u.username)', strtolower($username));
+        $this->db->or_like('LOWER(u.ad_role_id)', strtolower($username));
         $this->db->or_like('LOWER(u.name)', strtolower($username));
-        $this->db->or_like('LOWER(u.firstname)', strtolower($username));
-        $this->db->or_like('LOWER(u.lastname)', strtolower($username));
         $this->db->or_like('LOWER(u.email)', strtolower($username));
         $this->db->order_by('u.name');
         $query = $this->db->get();

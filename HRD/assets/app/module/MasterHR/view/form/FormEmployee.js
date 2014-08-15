@@ -15,17 +15,6 @@ var gender = Ext.create('Ext.data.Store',{
     ]
 });
 
-var religion = Ext.create('Ext.data.Store',{
-    fields  : ['id','religion'],
-    data    : [
-        {'id':'Islam','religion':'Islam'},
-        {'id':'Hindu','religion':'Hindu'},
-        {'id':'Budha','religion':'Budha'},
-        {'id':'Katholik','religion':'Khatolik'},
-        {'id':'Kristen','religion':'Kristen'}
-    ]
-});
-
 var blood   = Ext.create('Ext.data.Store',{
     fields  : ['id','blood'],
     data    : [
@@ -50,7 +39,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
     alias       : 'widget.formemployee',
     id          : 'formemployee',
     title       : 'Form Employee',
-    // store       : 'HRIS.module.MasterHR.store.Employee',
+    store       : 'HRIS.module.MasterHR.store.Employee',
     iconCls     : 'icon-application_form',
     autoHeight  : true,
     frame       : true,
@@ -190,16 +179,16 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                         {
                                             xtype           : 'combobox',
                                             fieldLabel      : 'Religion',
-                                            name            : 'religion',
+                                            name            : 'id_religion',
                                             emptyText       : 'Select Religion',
                                             labelWidth      : 50,
                                             margins         : '2px 2px 2px 2px',
                                             flex            : 1,
                                             allowBlank      : false,
                                             msgTarget       : 'under', 
-                                            store           : religion,
+                                            store           : Ext.create('HRIS.module.MasterData.store.Religion'),
                                             queryMode       : 'local',
-                                            displayField    : 'religion',
+                                            displayField    : 'name',
                                             valueField      : 'id'
                                         }                        
                                     ]
@@ -296,7 +285,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                             msgTarget       : 'under',
                                             store           : Ext.create('HRIS.module.MasterData.store.Education'),
                                             displayField    : 'name',
-                                            valueField      : 'id_education',
+                                            valueField      : 'id',
                                             listeners       : {
                                                 buffer  : 100,
                                                 change  : function(){
@@ -326,24 +315,17 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                     ]
                                 },
                                 {
-                                    xtype   : 'fieldcontainer',
-                                    layout  : 'hbox',
-                                    padding : '5px',
-                                    items   : [
-                                        {
-                                            xtype       : 'filefield',
-                                            anchor      : '100%',
-                                            fieldLabel  : 'Upload Foto',
-                                            name        : 'photo',
-                                            emptyText   : 'Upload Photo',
-                                            labelWidth  : 85,
-                                            flex        : 1,
-                                            buttonText  : '',
-                                            buttonConfig : {
-                                                iconCls : 'icon-page_portrait_shot'
-                                            }
-                                        }
-                                    ]
+                                    xtype       : 'filefield',
+                                    anchor      : '95%',
+                                    fieldLabel  : 'Upload Foto',
+                                    name        : 'photo',
+                                    emptyText   : 'Upload Photo',
+                                    labelWidth  : 85,
+                                    flex        : 1,
+                                    buttonText  : '',
+                                    buttonConfig : {
+                                        iconCls : 'icon-page_portrait_shot'
+                                    }
                                 }
                             ]    
                         }
@@ -692,7 +674,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             store           : Ext.create('HRIS.module.MasterHR.store.Employee'),
                             displayField    : 'fname',
                             valueField      : 'id_employee',
-                            allowBlank      : false,
+                            // allowBlank      : false,
                             msgTarget       : 'under',
                             listConfig      : {
                                 getInnerTpl : function(){
@@ -729,19 +711,10 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                     },
                     items       : [
                         {
-                            fieldLabel  : 'Phone 1',
+                            fieldLabel  : 'Home Phone',
                             emptyText   : 'First Phone Number',
                             tooltip     : 'First Phone Number',
-                            name        : 'phone1',
-                            editable    : true,
-                            xtype       : 'textfield',
-                            margins     : '0px 5px 0px 0px'
-                        },
-                        {
-                            fieldLabel  : 'Phone 2',
-                            emptyText   : 'Secondary Phone Number',
-                            tooltip     : 'Secondary Phone Number',
-                            name        : 'phone2',
+                            name        : 'phone',
                             editable    : true,
                             xtype       : 'textfield',
                             margins     : '0px 5px 0px 0px'

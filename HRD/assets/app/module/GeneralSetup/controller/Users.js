@@ -85,14 +85,10 @@ Ext.define('HRIS.module.GeneralSetup.controller.Users', {
         var win         = btn.up('window');
         var form        = win.down('form').getForm();
         var name        = form.findField('name').getValue();
-        var firstname   = form.findField('firstname').getValue();
         var role        = form.findField('role').getValue();
-        var lastname    = form.findField('lastname').getValue();
         var username    = form.findField('username').getValue();
         var password    = form.findField('password').getValue();
         var email       = form.findField('email').getValue();
-        var phone       = form.findField('phone').getValue();
-        var mobile      = form.findField('mobile').getValue();
         var isactive    = form.findField('isactive').getValue();
         var description = form.findField('description').getValue();
 
@@ -101,14 +97,10 @@ Ext.define('HRIS.module.GeneralSetup.controller.Users', {
             method  : 'POST',
             params  : {
                 name        : name,
-                firstname   : firstname,
                 role        : role,
-                lastname    : lastname,
                 username    : username,
                 password    : password,
                 email       : email,
-                phone       : phone,
-                mobile      : mobile,
                 isactive    : isactive,
                 description : description
             },
@@ -156,13 +148,9 @@ Ext.define('HRIS.module.GeneralSetup.controller.Users', {
         var id          = form.findField('id').getValue();
         var username    = form.findField('username').getValue();
         var name        = form.findField('name').getValue();
-        var firstname   = form.findField('firstname').getValue();
         var role        = form.findField('role').getValue();
-        var lastname    = form.findField('lastname').getValue();
         var description = form.findField('description').getValue();
         var email       = form.findField('email').getValue();
-        var phone       = form.findField('phone').getValue();
-        var mobile      = form.findField('mobile').getValue();
         var isactive    = form.findField('isactive').getValue();
         Ext.MessageBox.show({
             title           : 'Konfirmasi',
@@ -180,13 +168,9 @@ Ext.define('HRIS.module.GeneralSetup.controller.Users', {
                             username    : username,
                             name        : name,
                             role        : role,
-                            firstname   : firstname,
-                            lastname    : lastname,
                             description : description,
                             email       : email,
-                            phone       : phone,
-                            mobile      : mobile,
-                            isactive    : isactive,
+                            isactive    : isactive
                         },
                         success : function(response){
                             var data    = Ext.JSON.decode(response.responseText);

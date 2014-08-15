@@ -35,18 +35,8 @@ Ext.define('HRIS.module.GeneralSetup.view.grid.GridUsers', {
         },
         {
             text     : 'Role',
-            dataIndex: 'role',
+            dataIndex: 'id_role',
             width    : '10%'
-        },
-        {
-            text     : 'First Name',
-            dataIndex: 'firstname',
-            width    : '8%'
-        },
-        {
-            text     : 'Last Name',
-            dataIndex: 'lastname',
-            width    : '8%'
         },
         {
             text     : 'Description',
@@ -57,16 +47,6 @@ Ext.define('HRIS.module.GeneralSetup.view.grid.GridUsers', {
             text     : 'Email',
             dataIndex: 'email',
             width    : '7%'
-        },
-        {
-            text     : 'Phone',
-            dataIndex: 'phone',
-            width    : '7%'
-        },
-        {
-            text     : 'Mobile Phone',
-            dataIndex: 'mobile',
-            width    : '8%'
         }
     ],
     tbar: [

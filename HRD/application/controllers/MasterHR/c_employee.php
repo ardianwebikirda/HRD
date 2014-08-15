@@ -97,6 +97,7 @@ class C_employee extends CI_Controller
       $id_education    = ($this->input->post('id_education', TRUE) ? $this->input->post('id_education', TRUE) : '');
       $blood           = ($this->input->post('blood', TRUE) ? $this->input->post('blood', TRUE) : '');
       $photo           = ($this->input->post('photo', TRUE) ? $this->input->post('photo', TRUE) : '');
+      $address         = ($this->input->post('address', TRUE) ? $this->input->post('address', TRUE) : '');
       $code            = ($this->input->post('code', TRUE) ? $this->input->post('code', TRUE) : '');
       $id_company      = ($this->input->post('id_company', TRUE) ? $this->input->post('id_company', TRUE) : '');
       $id_department   = ($this->input->post('id_department', TRUE) ? $this->input->post('id_department', TRUE) : '');
@@ -105,8 +106,7 @@ class C_employee extends CI_Controller
       $hire            = ($this->input->post('hire', TRUE) ? $this->input->post('hire', TRUE) : '');
       $expired         = ($this->input->post('expired', TRUE) ? $this->input->post('expired', TRUE) : '');
       $supervisor      = ($this->input->post('supervisor', TRUE) ? $this->input->post('supervisor', TRUE) : '');
-      $phone1          = ($this->input->post('phone1', TRUE) ? $this->input->post('phone1', TRUE) : '');
-      $phone2          = ($this->input->post('phone2', TRUE) ? $this->input->post('phone2', TRUE) : '');
+      $phone           = ($this->input->post('phone', TRUE) ? $this->input->post('phone', TRUE) : '');
       $mobile1         = ($this->input->post('mobile1', TRUE) ? $this->input->post('mobile1', TRUE) : '');
       $mobile2         = ($this->input->post('mobile2', TRUE) ? $this->input->post('mobile2', TRUE) : '');
       $email1          = ($this->input->post('email1', TRUE) ? $this->input->post('email1', TRUE) : '');
@@ -115,16 +115,59 @@ class C_employee extends CI_Controller
       $bank_account    = ($this->input->post('bank_account', TRUE) ? $this->input->post('bank_account', TRUE) : '');
       $idcard_type     = ($this->input->post('idcard_type', TRUE) ? $this->input->post('idcard_type', TRUE) : '');
       $idcard_number   = ($this->input->post('idcard_number', TRUE) ? $this->input->post('idcard_number', TRUE) : '');
-      $tax             = ($this->input->post('tax', TRUE) ? $this->input->post('', TRUE) : 'tax');
-      $isactive1    = ($this->input->post('isactive', TRUE) ? $this->input->post('isactive', TRUE) : '');
-      if($isactive1 == TRUE) { $isactive = 'Y'; } else { $isactive = 'N'; }
+      $tax             = ($this->input->post('tax', TRUE) ? $this->input->post('tax', TRUE) : '');
       
+      $isactive1       = ($this->input->post('isactive', TRUE) ? $this->input->post('isactive', TRUE) : '');
+      if($isactive1 == TRUE) { $isactive = 'Y'; } else { $isactive = 'N'; }
+
+      $isovertime      = ($this->input->post('isovertime', TRUE) ? $this->input->post('isovertime', TRUE) : '');
+      if($isovertime == TRUE) {$isovertime = 'Y';} else {$isovertime = 'N';} 
+
+      $isresign        = ($this->input->post('isresign', TRUE) ? $this->input->post('isresign', TRUE) : '');
+      if($isresign == TRUE) {$isresign = 'Y';} else {$isresign = 'N';}
+
       $uuid         = $this->m_employee->getUUID();
 
-    if($name == '' && $name == NULL){
+    if($code == '' && $code == NULL){
       $success = 3;
-    } else if($this->m_employee->cekEmployee($name) == 0){ 
-      $this->m_employee->saveEmployee($code, $name, $logo, $isactive, $uuid);
+    } else if($this->m_employee->cekEmployee($code) == 0){ 
+      $this->m_employee->saveEmployee(
+          $fname,
+          $lname,
+          $username,
+          $gender,
+          $religion,
+          $bod_place,
+          $bod,
+          $marital_status,
+          $noc,
+          $id_education,
+          $blood,
+          $photo,
+          $address,
+          $code,
+          $id_company,
+          $id_department,
+          $id_jobtitle,
+          $id_jobstatus,
+          $hire,
+          $expired,
+          $supervisor,
+          $phone,
+          $mobile1,
+          $mobile2,
+          $email1,
+          $email2,
+          $id_bank,
+          $bank_account,
+          $idcard_type,
+          $idcard_number,
+          $tax,
+          $isactive,
+          $isovertime,
+          $isresign, 
+          $uuid
+        );
       if($this->m_employee->saveConfirm($uuid) == 0){ 
         $success = 0; 
       } else { 
