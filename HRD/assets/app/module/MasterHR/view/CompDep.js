@@ -1,5 +1,5 @@
 Ext.define('HRIS.module.MasterHR.view.CompDep', {
-    extend   :  'Ext.form.Panel',
+    extend   : 'Ext.form.Panel',
     title    : 'Company Detail',
     alias    : 'widget.compdep',
     id       : 'compdep',

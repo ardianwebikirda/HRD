@@ -81,8 +81,9 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             columnWidth : .27,
                             items       : [
                                 {
-                                    xtype :'box',
-                                    id    : 'photo',
+                                    xtype       : 'box',
+                                    id          : 'photo',
+                                    frame       : false,
                                     autoEl: {
                                         tag    : 'img',
                                         cls    : 'profile'
@@ -589,6 +590,8 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             valueField      : 'id',
                             allowBlank      : false,
                             msgTarget       : 'under',
+                            forceSelection  : true,
+                            action          : 'cariJT',
                             listeners       : {
                                 buffer  : 100,
                                 change  : function(){
@@ -612,18 +615,18 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             valueField      : 'id',
                             allowBlank      : false,
                             msgTarget       : 'under',
-                            listeners       : {
-                                buffer  : 100,
-                                change  : function(){
-                                    var store = this.store;
-                                    store.clearFilter();
-                                    store.filter({
-                                        property    : 'name',
-                                        anyMatch    : true,
-                                        value       : this.getValue()
-                                    });
-                                }
-                            }
+                            // listeners       : {
+                            //     buffer  : 100,
+                            //     change  : function(){
+                            //         var store = this.store;
+                            //         store.clearFilter();
+                            //         store.filter({
+                            //             property    : 'name',
+                            //             anyMatch    : true,
+                            //             value       : this.getValue()
+                            //         });
+                            //     }
+                            // }
 
                         }
                     ]
@@ -673,8 +676,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             emptyText       : 'Select Supervisor',
                             store           : Ext.create('HRIS.module.MasterHR.store.Employee'),
                             displayField    : 'fname',
-                            valueField      : 'id_employee',
-                            // allowBlank      : false,
+                            valueField      : 'id',
                             msgTarget       : 'under',
                             listConfig      : {
                                 getInnerTpl : function(){

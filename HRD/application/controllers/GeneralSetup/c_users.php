@@ -19,7 +19,8 @@ class C_users extends CI_Controller
     foreach ($result->result() as $key => $value) {
       $data['data'][] = array(        
         'id'            => $value->id,  
-        'id_role'       => $value->id_role,        
+        'id_role'       => $value->id_role,
+        'name_role'     => $value->name_role,        
         'name'          => $value->name,                
         'role'          => $value->role,                
         'username'      => $value->username,             

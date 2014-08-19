@@ -10,7 +10,7 @@ public function __construct(){
         // echo $limit.'-'.$offset;
         // exit();
         $this->db->select("u.ad_user_id AS id, u.ad_role_id AS id_role, u.username AS username, u.name AS name, u.description AS description, 
-            u.email AS email,r.ad_role_id AS role, u.isactive AS isactive,
+            u.email AS email,r.ad_role_id AS role, r.name AS name_role, u.isactive AS isactive,
             CASE WHEN u.isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
         $this->db->from('ad_user u');
         $this->db->join('ad_role r','r.ad_role_id=u.ad_role_id','left');
@@ -24,7 +24,7 @@ public function __construct(){
     public function countGridUsers()
     {
         $this->db->select("u.ad_user_id AS id, u.ad_role_id AS id_role, u.username AS username, u.name AS name, u.description AS description, 
-            u.email AS email,r.ad_role_id AS role, u.isactive AS isactive,
+            u.email AS email,r.ad_role_id AS role, r.name AS name_role, u.isactive AS isactive,
             CASE WHEN u.isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
         $this->db->from('ad_user u');
         $this->db->join('ad_role r','r.ad_role_id=u.ad_role_id','left');
@@ -96,7 +96,7 @@ public function __construct(){
     public function searchGridUsers($username)
     {
       $this->db->select("u.ad_user_id AS id, u.ad_role_id AS id_role, u.username AS username, u.name AS name, u.description AS description, 
-            u.email AS email,r.ad_role_id AS role, u.isactive AS isactive,
+            u.email AS email,r.ad_role_id AS role, r.name AS name_role, u.isactive AS isactive,
             CASE WHEN u.isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
         $this->db->from('ad_user u');
         $this->db->join('ad_role r','r.ad_role_id=u.ad_role_id','left');

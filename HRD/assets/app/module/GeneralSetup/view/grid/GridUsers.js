@@ -35,7 +35,7 @@ Ext.define('HRIS.module.GeneralSetup.view.grid.GridUsers', {
         },
         {
             text     : 'Role',
-            dataIndex: 'id_role',
+            dataIndex: 'name_role',
             width    : '10%'
         },
         {

@@ -53,11 +53,26 @@ class M_province extends CI_Model
     */
     public function chainProvince($id)
     {
-       $this->db->select("id_province AS id, CAST(id_country AS varchar(40)) AS id_country, code AS code, name AS name", FALSE);
-        $this->db->from('sys_province');
-        $this->db->where('id_country',$id);
-        $query = $this->db->get();
-        return $query;
+       /*------------------------------ 
+        Query Active Record Not Work
+
+       *$this->db->select("id_province AS id, CAST(id_country AS varchar(40)) AS id_country, code AS code, name AS name", FALSE);
+       *$this->db->from('sys_province');
+       *$this->db->where('id_country',$id);
+       *$query = $this->db->get();
+       *return $query;
+       ------------------------------*/
+
+        $sqlquery = 
+            'SELECT sys_province.id_province AS id, 
+            sys_province.id_country AS id_country, 
+            sys_province.code AS code, 
+            sys_province.name AS name 
+            FROM sys_province 
+            JOIN sys_country ON sys_province.id_country=sys_country.id_country';
+        $hslquery = $this->db->query($sqlquery);
+        return $hslquery;
+
     }
 
     /*

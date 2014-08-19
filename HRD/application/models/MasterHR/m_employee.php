@@ -20,13 +20,52 @@ class M_employee extends CI_Model
     public function getGridEmployee($limit, $offset)
     {
         $this->db->select("
-            id_employee AS id, 
-            code AS code, 
-            fname AS fname, 
-            lname AS lname, 
-            isactive AS isactive, 
-            CASE WHEN isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
-        $this->db->from('sys_employee');
+            se.id_employee AS id, 
+            se.fname AS fname, 
+            se.lname AS lname, 
+            se.username AS username, 
+            se.gender AS gender,             
+            se.id_religion AS id_religion, 
+            se.bod_place AS bod_place, 
+            se.bod AS bod, 
+            se.marital_status AS marital_status, 
+            se.noc AS noc,             
+            se.id_education AS id_education, 
+            se.blood AS blood, 
+            se.photo AS photo, 
+            se.address AS address, 
+            se.id_country AS id_country,
+            sc.name AS name_country,             
+            se.id_province AS id_province,
+            sp.name AS name_province, 
+            se.id_region AS id_region,
+            sr.name AS name_region,  
+            se.zip AS zip, 
+            se.code AS code, 
+            se.id_company AS id_company, 
+            se.id_department AS id_department,             
+            se.id_jobtitle AS id_jobtitle, 
+            se.id_jobstatus AS id_jobstatus, 
+            se.hire AS hire, 
+            se.expired AS expired, 
+            se.supervisor AS supervisor,             
+            se.phone AS phone, 
+            se.mobile1 AS mobile1, 
+            se.mobile2 AS mobile2, 
+            se.email1 AS email1, 
+            se.email2 AS email2, 
+            se.id_bank AS id_bank,             
+            se.bank_account AS bank_account, 
+            se.idcard_type AS idcard_type, 
+            se.idcard_number AS idcard_number, 
+            se.tax AS tax,             
+            se.isactive AS isactive, CASE WHEN isactive = 'Y' THEN 1 ELSE 0 END AS isactive,
+            se.isovertime AS isovertime, CASE WHEN isovertime = 'Y' THEN 1 ELSE 0 END AS isovertime,
+            se.isresign AS isresign, CASE WHEN isresign = 'Y' THEN 1 ELSE 0 END AS isresign", FALSE);
+        $this->db->from('sys_employee se');
+        $this->db->join('sys_country sc','se.id_country=sc.id_country','left');
+        $this->db->join('sys_province sp','se.id_province=sp.id_province','left');
+        $this->db->join('sys_region sr','se.id_region=sr.id_region','left');
         $this->db->order_by('fname');
         $this->db->limit($offset, $limit);
         $query = $this->db->get();
@@ -41,13 +80,46 @@ class M_employee extends CI_Model
     public function countGridEmployee()
     {
        
-       $this->db->select("
+      $this->db->select("
             id_employee AS id, 
-            code AS code, 
             fname AS fname, 
             lname AS lname, 
-            isactive AS isactive, 
-            CASE WHEN isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
+            username AS username, 
+            gender AS gender,             
+            id_religion AS id_religion, 
+            bod_place AS bod_place, 
+            bod AS bod, 
+            marital_status AS marital_status, 
+            noc AS noc,             
+            id_education AS id_education, 
+            blood AS blood, 
+            photo AS photo, 
+            address AS address, 
+            id_country AS id_country,             
+            id_province AS id_province, 
+            id_region AS id_region, 
+            zip AS zip, 
+            code AS code, 
+            id_company AS id_company, 
+            id_department AS id_department,             
+            id_jobtitle AS id_jobtitle, 
+            id_jobstatus AS id_jobstatus, 
+            hire AS hire, 
+            expired AS expired, 
+            supervisor AS supervisor,             
+            phone AS phone, 
+            mobile1 AS mobile1, 
+            mobile2 AS mobile2, 
+            email1 AS email1, 
+            email2 AS email2, 
+            id_bank AS id_bank,             
+            bank_account AS bank_account, 
+            idcard_type AS idcard_type, 
+            idcard_number AS idcard_number, 
+            tax AS tax,             
+            isactive AS isactive, CASE WHEN isactive = 'Y' THEN 1 ELSE 0 END AS isactive,
+            isovertime AS isovertime, CASE WHEN isovertime = 'Y' THEN 1 ELSE 0 END AS isovertime,
+            isresign AS isresign, CASE WHEN isresign = 'Y' THEN 1 ELSE 0 END AS isresign", FALSE);
         $this->db->from('sys_employee');
         $this->db->order_by('fname');
         $query = $this->db->get();
@@ -90,6 +162,10 @@ class M_employee extends CI_Model
           $blood,
           $photo,
           $address,
+          $id_country,
+          $id_province,
+          $id_region,
+          $zip,
           $code,
           $id_company,
           $id_department,
@@ -127,6 +203,10 @@ class M_employee extends CI_Model
         $this->db->set('blood', $blood);
         $this->db->set('photo', $photo);
         $this->db->set('address', $address);
+        $this->db->set('id_country', $id_country);
+        $this->db->set('id_province', $id_province);
+        $this->db->set('id_region', $id_region);
+        $this->db->set('zip', $zip);
         $this->db->set('code', $code);
         $this->db->set('id_company', $id_company);
         $this->db->set('id_department', $id_department);
@@ -233,8 +313,8 @@ class M_employee extends CI_Model
     /*
     * Query untuk validasi key / index untuk udate data 
     */
-    public function cekEmployeeID($name, $id){
-        return $this->db->select('COUNT(*) AS id', FALSE)->from('sys_employee')->where('name',$name)->where('id_employee !=', $id)->get()->row()->id;
+    public function cekEmployeeID($code, $id){
+        return $this->db->select('COUNT(*) AS id', FALSE)->from('sys_employee')->where('code',$code)->where('id_employee !=', $id)->get()->row()->id;
     }
 
     /*
@@ -247,16 +327,94 @@ class M_employee extends CI_Model
     /*
     * Query untuk update data 
     */ 
-    public function updateEmployee($code, $name,$isactive, $id){
-            $data = array(
-                           'code'      => $code,
-                           'name'       => $name,
-                           'isactive'   => $isactive,
-                           'updated'    => date('Y-m-d H:i:s'),
-                           'updatedby'  => $this->session->userdata('id')
-                        );
-            $this->db->where('id_employee',$id);
-            $this->db->update('sys_employee', $data);              
+    public function updateEmployee(
+        $id,
+        $fname,
+        $lname,
+        $username,
+        $gender,
+        $religion,
+        $bod_place,
+        $bod,
+        $marital_status,
+        $noc,
+        $id_education,
+        $blood,
+        $photo,
+        $address,
+        $id_country,
+        $id_province,
+        $id_region,
+        $code,
+        $zip,
+        $id_company,
+        $id_department,
+        $id_jobtitle,
+        $id_jobstatus,
+        $hire,
+        $expired,
+        $supervisor,
+        $phone,
+        $mobile1,
+        $mobile2,
+        $email1,
+        $email2,
+        $id_bank,
+        $bank_account,
+        $idcard_type,
+        $idcard_number,
+        $tax,
+        $isactive,
+        $isovertime,
+        $isresign 
+
+    )
+    {
+        $data = array(
+                       'fname'              => $fname,
+                       'lname'              => $lname,
+                       'isactive'           => $isactive,
+                        'username'          => $username,
+                        'gender'            => $gender,
+                        'id_religion'       => $religion,
+                        'bod_place'         => $bod_place,
+                        'bod'               => $bod,
+                        'marital_status'    => $marital_status,
+                        'noc'               => $noc,
+                        'id_education'      => $id_education,
+                        'blood'             => $blood,
+                        'photo'             => $photo,
+                        'address'           => $address,
+                        'id_country'        => $id_country,
+                        'id_province'       => $id_province,
+                        'id_region'         => $id_region,
+                        'zip'               => $zip,
+                        'code'              => $code,
+                        'id_company'        => $id_company,
+                        'id_department'     => $id_department,
+                        'id_jobtitle'       => $id_jobtitle,
+                        'id_jobstatus'      => $id_jobstatus,
+                        'hire'              => $hire,
+                        'expired'           => $expired,
+                        'supervisor'        => $supervisor,
+                        'phone'             => $phone,
+                        'mobile1'           => $mobile1,
+                        'mobile2'           => $mobile2,
+                        'email1'            => $email1,
+                        'email2'            => $email2,
+                        'id_bank'           => $id_bank,
+                        'bank_account'      => $bank_account,
+                        'idcard_type'       => $idcard_type,
+                        'idcard_number'     => $idcard_number,
+                        'tax'               => $tax,
+                        'isactive'          => $isactive,
+                        'isovertime'        => $isovertime,
+                        'isresign'          => $isresign,
+                        'updated'           => date('Y-m-d H:i:s'),
+                        'updatedby'         => $this->session->userdata('id')
+                    );
+        $this->db->where('id_employee',$id);
+        $this->db->update('sys_employee', $data);
     }
 
     /*
@@ -264,10 +422,12 @@ class M_employee extends CI_Model
     */ 
     public function searchGridEmployee($name)
     {
-        $this->db->select("sse.id_employee AS id, sse.code AS code, sse.name AS name, 
+        $this->db->select("sse.id_employee AS id, sse.code AS code, sse.fname AS fname, sse.lname AS lname, 
             sse.isactive AS isactive, CASE WHEN sse.isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
         $this->db->from('sys_employee sse');
-        $this->db->like('LOWER(sse.name)', strtolower($name));
+        $this->db->like('LOWER(sse.code)', strtolower($name));
+        $this->db->or_like('LOWER(sse.fname)', strtolower($name));
+        $this->db->or_like('LOWER(sse.lname)', strtolower($name));
         $this->db->order_by('code');
         $query = $this->db->get();
         return $query;

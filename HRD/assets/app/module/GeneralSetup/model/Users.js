@@ -10,6 +10,10 @@ Ext.define('HRIS.module.GeneralSetup.model.Users', {
             type    : 'string'
         },
         {
+            name    : 'name_role',
+            type    : 'string'
+        },
+        {
             name    : 'username',
             type    : 'string'
         },

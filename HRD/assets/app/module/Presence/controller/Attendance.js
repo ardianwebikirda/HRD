@@ -1,40 +1,41 @@
-Ext.define('HRIS.module.MasterHR.controller.Employee', {
+Ext.define('HRIS.module.Presence.controller.Attendance', {
     extend  : 'Ext.app.Controller',
     CheckedDataEdit: [],
     
 
     init: function() {
         var me = this;
-        me.getStore('HRIS.module.MasterHR.store.Employee').load();
+        me.getStore('HRIS.module.Presence.store.AttEmployee').load();
+        // me.getStore('HRIS.module.Presence.store.Attendance').load();
         me.control({
-            "#gridemployee"                          : {
-               itemclick: me.groupEmployee
+            "#gridattendance"                          : {
+               itemclick: me.groupAttendance
             },
-            "gridemployee  button[action=delete]"    : {
+            "gridattendance  button[action=delete]"    : {
                 click: me.del
             },  
-            "gridemployee textfield[action=search]"  : {
+            "gridattendance textfield[action=search]"  : {
                keypress: me.search
             },
-            "gridemployee button[action=print]"      : {
+            "gridattendance button[action=print]"      : {
                click: me.print
             }, 
-            "formemployee  button[action=save]"      : {
+            "formattendance  button[action=save]"      : {
                 click: me.save
             },
-            "formemployee button[action=update]"     : {
+            "formattendance button[action=update]"     : {
                click: me.update
             }, 
-            "formemployee  button[action=reset]"     : {
+            "formattendance  button[action=reset]"     : {
                 click: me.reset
             },
-            "formemployee #id_country"               : {
+            "formattendance #id_country"               : {
                 select: me.loadComboProvince
             },
-            "formemployee #id_province"               : {
+            "formattendance #id_province"               : {
                 select: me.loadComboRegion
             },
-            "formemployee  #id_jobtitle"     : {
+            "formattendance  #id_jobtitle"     : {
                 select: me.cariJT
             },
             "griddepartment2"    : {
@@ -52,11 +53,11 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
 
     reloadStore: function(){
         var me = this;
-        me.getStore('HRIS.module.MasterHR.store.Employee').reload();
-        // me.getStore('HRIS.module.MasterHR.store.Department2').reload();
+        me.getStore('HRIS.module.Presence.store.Attendance').reload();
+        // me.getStore('HRIS.module.Presence.store.Department2').reload();
     },
-    groupEmployee: function(me, record, item, index, e, eOpts) {//Edit
-        var form = Ext.getCmp('formemployee');
+    groupAttendance: function(me, record, item, index, e, eOpts) {//Edit
+        var form = Ext.getCmp('formattendance');
         form.getForm().setValues(record.data);
         var saveButton = form.down('button[action=save]');
         saveButton.setDisabled(true);
@@ -64,10 +65,10 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var updateButton = form.down('button[action=update]');
         updateButton.setDisabled(false);
 
-        var comboProvince = Ext.ComponentQuery.query('formemployee #id_province')[0];
+        var comboProvince = Ext.ComponentQuery.query('formattendance #id_province')[0];
         comboProvince.setDisabled(false);
 
-        var comboRegion = Ext.ComponentQuery.query('formemployee #id_region')[0];
+        var comboRegion = Ext.ComponentQuery.query('formattendance #id_region')[0];
         comboRegion.setDisabled(false);
 
 
@@ -91,14 +92,14 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
             fn              : function(btn, evtObj){
                 if (btn === 'yes') {
                     Ext.Ajax.request({
-                        url             : BASE_URL + 'MasterHR/c_employee/delEmployee',
+                        url             : BASE_URL + 'Presence/c_attendance/delAttendance',
                         method          : 'POST',
                         params          : {post : Ext.encode(me.CheckedDataEdit)},
                         success         : function(response){
                             var data    = Ext.JSON.decode(response.responseText);
                             // console.log(data);
                             me.reset();
-                            var storeApproval = Ext.getStore('HRIS.module.MasterHR.store.Employee');
+                            var storeApproval = Ext.getStore('HRIS.module.Presence.store.Attendance');
                             storeApproval.removeAll();
                             storeApproval.add(data.data);
                         }
@@ -110,13 +111,13 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
     search: function(field, evt, opts){
         var value       = field.getValue();
             Ext.Ajax.request({
-                url     : BASE_URL + 'MasterHR/c_employee/searchEmployee',
+                url     : BASE_URL + 'Presence/c_attendance/searchAttendance',
                 method  : 'POST',
                 params  : {name : value},
                 success : function(response){
                     var data    = Ext.JSON.decode(response.responseText);
                     if(data.success){
-                            var storeApproval = Ext.getStore('HRIS.module.MasterHR.store.Employee');
+                            var storeApproval = Ext.getStore('HRIS.module.Presence.store.Attendance');
                             storeApproval.removeAll();
                             storeApproval.add(data.data);
                     }
@@ -124,11 +125,11 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
             });
     },
     print : function(){
-        window.location = BASE_URL + 'MasterHR/c_employee/printEmployee/';
+        window.location = BASE_URL + 'Presence/c_attendance/printAttendance/';
     },
     save: function(btn, evt, opts){
         var me              = this;
-        var form            = btn.up('formemployee').getForm();
+        var form            = btn.up('formattendance').getForm();
         var fname           = form.findField('fname').getValue();
         var lname           = form.findField('lname').getValue();
         var username        = form.findField('username').getValue();
@@ -170,7 +171,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         // console.log('hai');
         console.log(marital_status, noc, idcard_type, idcard_number);
         Ext.Ajax.request({
-            url     : BASE_URL + 'MasterHR/c_employee/saveEmployee',
+            url     : BASE_URL + 'Presence/c_attendance/saveAttendance',
             method  : 'POST',
             params  : {
                 fname           : fname,
@@ -223,12 +224,12 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
                     });
                     // win.close();
                     me.reset();
-                    me.getStore('HRIS.module.MasterHR.store.Employee').removeAll();
-                    me.getStore('HRIS.module.MasterHR.store.Employee').reload();
+                    me.getStore('HRIS.module.Presence.store.Attendance').removeAll();
+                    me.getStore('HRIS.module.Presence.store.Attendance').reload();
                 }else if (data.total === 2){
                     Ext.MessageBox.show({
                         title           : 'Error',
-                        msg             : 'Employee Telah Terdaftar - Silahkan Gunakan Employee Lain',
+                        msg             : 'Attendance Telah Terdaftar - Silahkan Gunakan Attendance Lain',
                         icon            : Ext.MessageBox.ERROR,
                         buttons         : Ext.MessageBox.OK
                     });
@@ -245,7 +246,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
     },
     update: function(btn){
         var me              = this;
-        var form            = btn.up('formemployee').getForm();
+        var form            = btn.up('formattendance').getForm();
         var id              = form.findField('id').getValue();
         var fname           = form.findField('fname').getValue();
         var lname           = form.findField('lname').getValue();
@@ -295,7 +296,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
             fn              : function(btn, evtObj){
                 if (btn == 'yes') {
                     Ext.Ajax.request({
-                        url     : BASE_URL + 'MasterHR/c_employee/editEmployee',
+                        url     : BASE_URL + 'Presence/c_attendance/editAttendance',
                         method  : 'POST',
                         params  : {
                             id              : id,
@@ -350,12 +351,12 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
                                 });
                                 // win.close();
                                 me.reset();
-                                me.getStore('HRIS.module.MasterHR.store.Employee').removeAll();
-                                me.getStore('HRIS.module.MasterHR.store.Employee').reload();
+                                me.getStore('HRIS.module.Presence.store.Attendance').removeAll();
+                                me.getStore('HRIS.module.Presence.store.Attendance').reload();
                             }else if (data.total === 2){
                                 Ext.MessageBox.show({
                                     title           : 'Error',
-                                    msg             : 'Employee Telah Terdaftar - Silahkan Gunakan Employee Lain',
+                                    msg             : 'Attendance Telah Terdaftar - Silahkan Gunakan Attendance Lain',
                                     icon            : Ext.MessageBox.ERROR,
                                     buttons         : Ext.MessageBox.OK
                                 });
@@ -374,7 +375,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         });      
     },
     reset: function(btn) {//Reset Form
-        var form        = Ext.getCmp('formemployee');
+        var form        = Ext.getCmp('formattendance');
         var grid        = Ext.getCmp('griddepartment2');
         form.getForm().reset();
 
@@ -385,20 +386,20 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         updateButton.setDisabled(true);
 
         var me = this;
-        me.getStore('HRIS.module.MasterHR.store.Employee').reload();
-        me.getStore('HRIS.module.MasterHR.store.Department2').reload();
+        me.getStore('HRIS.module.Presence.store.Attendance').reload();
+        me.getStore('HRIS.module.Presence.store.Department2').reload();
     },
     addDepartment2: function(grid, record, item, index, e, eOpts){
-        if(record.data.id_employee ===''||record.data.id_employee === null){
+        if(record.data.id_attendance ===''||record.data.id_attendance === null){
              Ext.MessageBox.show({
                 title           : 'Error',
-                msg             : 'Pilih Employee Terlebih Dahulu',
+                msg             : 'Pilih Attendance Terlebih Dahulu',
                 icon            : Ext.MessageBox.ERROR,
                 buttons         : Ext.MessageBox.OK
             });  
          } else {
-            // this.getStore('HRIS.module.MasterHR.store.Employee').load();
-            var win = Ext.create('HRIS.module.MasterHR.view.form.FormDepartment2');
+            // this.getStore('HRIS.module.Presence.store.Attendance').load();
+            var win = Ext.create('HRIS.module.Presence.view.form.FormDepartment2');
             win.show();
             win.down('form').loadRecord(record);
         }
@@ -416,7 +417,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         console.log(id_comp);
 
         Ext.Ajax.request({
-            url     : BASE_URL + 'MasterHR/c_employee/saveDepartment2',
+            url     : BASE_URL + 'Presence/c_attendance/saveDepartment2',
             method  : 'POST',
             params  : {
                 id_dept     : id_dept,
@@ -433,8 +434,8 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
                         buttons         : Ext.MessageBox.OK
                     });
                     win.close();
-                    me.getStore('HRIS.module.MasterHR.store.Employee').reload();
-                    me.getStore('HRIS.module.MasterHR.store.Department2').reload();
+                    me.getStore('HRIS.module.Presence.store.Attendance').reload();
+                    me.getStore('HRIS.module.Presence.store.Department2').reload();
                     me.reset();
                 }else if (data.total === 2){
                     Ext.MessageBox.show({
@@ -473,13 +474,13 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
             fn              : function(btn, evtObj){
                 if (btn === 'yes') {
                     Ext.Ajax.request({
-                        url             : BASE_URL + 'MasterHR/c_employee/delDepartment',
+                        url             : BASE_URL + 'Presence/c_attendance/delDepartment',
                         method          : 'POST',
                         params          : {post : Ext.encode(me.CheckedDataEdit)},
                         success         : function(response){
                             var data    = Ext.JSON.decode(response.responseText);
                             me.reset();
-                            var storeApproval = Ext.getStore('HRIS.module.MasterHR.store.Department2');
+                            var storeApproval = Ext.getStore('HRIS.module.Presence.store.Department2');
                             storeApproval.removeAll();
                             storeApproval.add(data.data);
                         }
@@ -490,12 +491,12 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
     },
 
     loadComboProvince : function(combo, records){
-        var comboProvince = Ext.ComponentQuery.query('formemployee #id_province')[0];
+        var comboProvince = Ext.ComponentQuery.query('formattendance #id_province')[0];
         comboProvince.setDisabled(true);
         comboProvince.setValue('');
         comboProvince.store.removeAll();
 
-        var comboCountry    = Ext.ComponentQuery.query('formemployee #id_country')[0];
+        var comboCountry    = Ext.ComponentQuery.query('formattendance #id_country')[0];
         var countryId       = comboCountry.getValue();
         comboProvince.store.load({
             params  : { countryId : countryId }
@@ -504,12 +505,12 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
     },
 
     loadComboRegion : function(combo, records){
-        var comboRegion = Ext.ComponentQuery.query('formemployee #id_region')[0];
+        var comboRegion = Ext.ComponentQuery.query('formattendance #id_region')[0];
         comboRegion.setDisabled(true);
         comboRegion.setValue('');
         comboRegion.store.removeAll();
 
-        var comboProvince   = Ext.ComponentQuery.query('formemployee #id_province')[0];
+        var comboProvince   = Ext.ComponentQuery.query('formattendance #id_province')[0];
         provinceId          = comboProvince.getValue();
         comboRegion.store.load({
             params  : { provinceId : provinceId }
@@ -519,7 +520,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
 
     cariJT : function(combo, records, index){
         var me = this;
-        var store = me.getStore('HRIS.module.MasterHR.store.JobTitle').reload();
+        var store = me.getStore('HRIS.module.Presence.store.JobTitle').reload();
         store.clearFilter();
         store.filter({
             property    : 'name',

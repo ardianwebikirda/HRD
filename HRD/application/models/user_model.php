@@ -25,10 +25,10 @@ class User_model extends CI_Model
 		$this->db->select('gm.ad_menu_id AS id');
 		$this->db->from('ad_role_menu AS gm');
 		$this->db->join('ad_role r', 'r.ad_role_id=gm.ad_role_id');
-		$this->db->join('ad_user u', 'r.ad_user_id=u.ad_user_id');
+		$this->db->join('ad_user u', 'r.ad_role_id=u.ad_role_id');
 		$this->db->where('u.ad_user_id',$id);
 		$query = $this->db->get();
-		// echo $this->db->last_query();
+	// echo $this->db->last_query();
   //   	exit();
 		return $query;
 	}
@@ -60,9 +60,10 @@ class User_model extends CI_Model
 	{
 	  	$menus = $this->user_rules($this->session->userdata('id'));
 	    foreach($menus->result() as $val){
-	        $data[]       = $val->id;
+	        $data[]  = $val->id;
 	    }
-	  	
+	  	// var_dump($menus);
+	  	// exit();
 	  	if ($node) {
 	    	$result = $this->cekruleschild($node, $data);
 	  	} else {

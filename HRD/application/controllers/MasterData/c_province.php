@@ -51,9 +51,6 @@ class C_province extends CI_Controller
     */
   public function chainProvince()
   {
-    // $start      = ($this->input->post('start', TRUE) ? $this->input->post('start', TRUE) : 0);
-    // $limit      = ($this->input->post('limit', TRUE) ? $this->input->post('limit', TRUE) : 20);  
-    // $result   = $this->m_province->getGridProvince($start,$limit);
     $id       = $this->input->post('countryId');
     $result1  = $this->m_province->chainProvince($id);
     $count    = $result1->num_rows();
@@ -63,13 +60,10 @@ class C_province extends CI_Controller
         'id'            => $value->id,
         'id_country'    => $value->id_country,
         'code'          => $value->code,         
-        'name'          => $value->name                
-           
+        'name'          => $value->name                 
         );
     }
 
-    // $data['total']   = $count;
-    // $data['success'] = true;
     echo json_encode($data);
   }
  
