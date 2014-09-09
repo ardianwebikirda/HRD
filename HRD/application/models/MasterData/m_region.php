@@ -139,26 +139,36 @@ class M_region extends CI_Model
     public function chainRegion($id)
     {
         /*--------------------------------------
-        Query Active Record Not Works
+        Query for add */
 
-        * $this->db->select("id_region AS id, 
-        * code AS code, 
-        * name AS name", FALSE);
-        * $this->db->from('sys_region');
-        * $this->db->where('id_province',$id);
-        * $query = $this->db->get();
-        * return $query;
-        ---------------------------------------*/
+        $this->db->select("id_region AS id, 
+        id_province AS id_province,
+        code AS code, 
+        name AS name", FALSE);
+        $this->db->from('sys_region');
+        $this->db->where('id_province',$id);
+        $query = $this->db->get();
+        return $query;
+
+
+
+    }
+
+    public function chainRegion2($id){
+        /*--------------------------------------
+        Query for update */
 
         $sqlquery = 
             'SELECT sys_region.id_region AS id, 
             sys_region.id_province AS id_province, 
             sys_region.code AS code, 
             sys_region.name AS name 
-            FROM sys_region 
+            FROM sys_region  
             JOIN sys_province ON sys_region.id_province=sys_province.id_province';
         $hslquery = $this->db->query($sqlquery);
-        return $hslquery;
+        return $hslquery; 
+        
+       /* ---------------------------------------*/       
     }
 
     /*

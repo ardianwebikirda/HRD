@@ -8,7 +8,7 @@ Ext.define('HRIS.module.Presence.view.Attendance',{
 	plain 		: true,
 	closable	: true,
 	requires	: [
-		'HRIS.module.Presence.view.grid.GridAttEmployee',
+		'HRIS.module.Presence.view.TabUpload',
 		'HRIS.module.Presence.view.TabAttendance'
 	],
 	layout		: {
@@ -20,7 +20,7 @@ Ext.define('HRIS.module.Presence.view.Attendance',{
     },
 	items		: [
 		{
-			xtype	: 'gridattemployee',
+			xtype	: 'tabupload',
 			flex	: 0.8
 		},
 		{

@@ -24,11 +24,11 @@ Ext.define('HRIS.module.MasterData.view.form.FormRegion',{
 				items		: [
 					{
                         xtype       : 'combobox',
-                        name        : 'province',
+                        name        : 'id_province',
                         emptyText   : 'Type to Select Province',
                         fieldLabel  : 'Province',
                         autoScroll  : false,
-                        store       : Ext.create('HRIS.module.MasterData.store.MinProvince'),
+                        store       : Ext.create('HRIS.module.MasterData.store.Province'),
                         displayField: 'name',
                         valueField  : 'id',
                         anchor      : '100%',
@@ -62,12 +62,7 @@ Ext.define('HRIS.module.MasterData.view.form.FormRegion',{
 						name 		: 'name',
 						emptyText	: 'Region Name',
 						anchor		: '100%'	
-					},
-                    {
-                        text    : '-- Pada combobox province ketik nama province otomatis akan keluar',
-                        height  : 20,
-                        xtype   : 'label'
-                    }
+					}
 				]
 			}
 		];

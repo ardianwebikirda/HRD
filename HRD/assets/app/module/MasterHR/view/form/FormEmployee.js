@@ -1,65 +1,112 @@
-var marry = Ext.create('Ext.data.Store',{
-    fields  : ['id','marry'],
-    data    : [
-        {'id':'Single','marry':'Single'},
-        {'id':'Married','marry':'Married'},
-        {'id':'Divorced','marry':'Divorced'}
-    ]
-});
-
-var gender = Ext.create('Ext.data.Store',{
-    fields  : ['id','gender'],
-    data    : [
-        {'id':'Laki-laki','gender':'Laki-laki'},
-        {'id':'Perempuan','gender':'Perempuan'}
-    ]
-});
-
-var blood   = Ext.create('Ext.data.Store',{
-    fields  : ['id','blood'],
-    data    : [
-        {'id':'A','blood':'A'},
-        {'id':'B','blood':'B'},
-        {'id':'AB','blood':'AB'},
-        {'id':'O','blood':'O'}
-    ]
-});
-
-var idcard = Ext.create('Ext.data.Store',{
-    fields  : ['id','name'],
-    data    : [
-        {'id':'KTP', 'name':'KTP/Civil Card'},
-        {'id':'PASPOR', 'name':'PASPOR'},
-        {'id':'SIM', 'name':'SIM/Drive Lisence'}
-    ]
-});
-
-Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
-    extend      : 'Ext.form.Panel',
+Ext.define('HRIS.module.MasterHR.view.form.FormEmployee',{
+    extend      : 'Ext.window.Window',
+    closeable   : true,
+    modal       : true,
     alias       : 'widget.formemployee',
     id          : 'formemployee',
     title       : 'Form Employee',
     store       : 'HRIS.module.MasterHR.store.Employee',
     iconCls     : 'icon-application_form',
-    autoHeight  : true,
+    width       : 800,
+    height      : 575,
+    modal       : true,
     frame       : true,
-    bodyStyle   : 'padding : 1px; background : transparent;',
-    dockedItems : [
-        {
-            xtype   : 'toolbar',
-            dock    : 'top',
-            items   : [
-                {xtype: 'button', text: 'Save', iconCls: 'icon-disk', action: 'save'},
-                {xtype: 'button', text: 'Update', iconCls: 'icon-pencil', action: 'update', disabled: true},
-                {xtype: 'button', text: 'Reset', iconCls: 'icon-page_refresh', action: 'update'}
-            ]
-        }
+    bbar        : [
+        '->',
+        {xtype: 'button', text: 'Save', iconCls: 'icon-disk', action: 'save'},
+        {xtype: 'button', text: 'Reset', iconCls: 'icon-page_refresh', action: 'reset'}        
     ],
     items       : [
         {
-            xtype   : 'hidden',
-            name    : 'id'
-        },
+            xtype       : 'form',
+            autoScroll  : true,
+            border      : false,
+            layout      : {
+                type    : 'fit'
+            },
+            items       : [
+                {
+                    xtype       : 'tabpanel',
+                    activeTab   : 0,
+                    border      : false,
+                    items       : [
+                        {
+                            xtype       : 'panel',
+                            autoScroll  : true,
+                            border      : false,
+                            layout      : {
+                                type    : 'anchor'
+                            },
+                            title       : 'Biography',
+                            defaults    : {
+                                anchor      : '100%',
+                                msgTarget   : 'under'
+                            },
+                            items       : [
+                                {
+                                    xtype   : 'hidden',
+                                    name    : 'id'
+                                },
+                                {
+                                    xtype   : 'biography'   
+                                }
+                            ] 
+                        },
+                        {
+                            xtype       : 'panel',
+                            autoScroll  : true,
+                            bodyPadding : 10,
+                            frame       : true,
+                            border      : false,
+                            layout      : {
+                                type    : 'anchor'
+                            },
+                            title       : 'Company Information',
+                            defaults    : {
+                                anchor      : '100%',
+                                msgTarget   : 'under'
+                            },
+                            items       : [
+                                {
+                                    xtype   : 'companyinformation'
+                                }
+                            ] 
+                        },
+                        {
+                            xtype       : 'panel',
+                            autoScroll  : true,
+                            bodyPadding : 10,
+                            frame       : true,
+                            border      : false,
+                            layout      : {
+                                type    : 'anchor'
+                            },
+                            title       : 'Personal Information',
+                            defaults    : {
+                                anchor      : '100%',
+                                msgTarget   : 'under'
+                            },
+                            items       : [
+                                {
+                                    xtype   : 'contact'
+                                }
+                            ]  
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+});
+
+Ext.define('HRIS.module.MasterHR.view.form.Biography',{
+    extend  : 'Ext.form.Panel',
+    alias   : 'widget.biography',
+    id      : 'biography',
+    frame   : true,
+    padding : 3,
+    border  : false,
+    items   : [
         {
             /* ====================== */ 
             /* Biography Fieldset Place */
@@ -67,8 +114,9 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
             xtype       : 'fieldset',
             title       : 'Biography',
             collapsible : true,
-            collapsed   : true,
+            collapsed   : false,
             autoHeight  : true,
+            border      : false,
             defaults    : {
                 anchor  : '100%'
             },
@@ -76,14 +124,19 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                 {
                     xtype   : 'container',
                     layout  : { type: 'column' },
-                    items       : [
+                    items   : [
                         {
                             columnWidth : .27,
                             items       : [
                                 {
                                     xtype       : 'box',
                                     id          : 'photo',
+                                    layout      : 'fit',
                                     frame       : false,
+                                    style: {
+                                        color: '#FFFFFF',
+                                        backgroundColor:'#ECF58E'
+                                    },
                                     autoEl: {
                                         tag    : 'img',
                                         cls    : 'profile'
@@ -172,7 +225,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                             flex            : 1,
                                             allowBlank      : false,
                                             msgTarget       : 'under',
-                                            store           : gender,
+                                            store           : Ext.create('HRIS.module.MasterHR.store.gender'),
                                             queryMode       : 'local',
                                             displayField    : 'gender',
                                             valueField      : 'id'
@@ -253,7 +306,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                             flex            : 1.3,
                                             allowBlank      : false,
                                             msgTarget       : 'under',
-                                            store           : marry,
+                                            store           : Ext.create('HRIS.module.MasterHR.store.marry'),
                                             queryMode       : 'local',
                                             displayField    : 'marry',
                                             valueField      : 'id'
@@ -285,6 +338,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                             allowBlank      : false,
                                             msgTarget       : 'under',
                                             store           : Ext.create('HRIS.module.MasterData.store.Education'),
+                                            queryMode       : 'local',
                                             displayField    : 'name',
                                             valueField      : 'id',
                                             listeners       : {
@@ -308,7 +362,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                             labelWidth      : 50,
                                             margins         : '2px 2px 2px 2px',
                                             flex            : 0.8,
-                                            store           : blood,
+                                            store           : Ext.create('HRIS.module.MasterHR.store.blood'),
                                             queryMode       : 'local',
                                             displayField    : 'blood',
                                             valueField      : 'id'
@@ -317,7 +371,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                 },
                                 {
                                     xtype       : 'filefield',
-                                    anchor      : '95%',
+                                    anchor      : '100%',
                                     fieldLabel  : 'Upload Foto',
                                     name        : 'photo',
                                     emptyText   : 'Upload Photo',
@@ -328,9 +382,9 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                         iconCls : 'icon-page_portrait_shot'
                                     }
                                 }
-                            ]    
+                            ]
                         }
-                    ]
+                    ]                    
                 },
                 {
                     fieldLabel  : 'Address',
@@ -461,34 +515,37 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                         }
                     ]
                 }
-            ]   
-        },        
+            ]
+        }
+    ]
+});
+
+Ext.define('HRIS.module.MasterHR.view.form.CompanyInformation',{
+    extend  : 'Ext.form.Panel',
+    alias   : 'widget.companyinformation',
+    id      : 'companyinformation',
+    frame   : true,
+    border  : false,
+    padding : 3,
+    items   : [
         {
-            
-            /* ====================== */ 
-            /* Company Information Fieldset Place */
-            /* ====================== */
-            xtype       : 'fieldset',
-            title       : 'Company Information',
+            xtype   : 'fieldset',
+            title   : 'Company Information',
             collapsible : true,
-            collapsed   : true,
+            collapsed   : false,
+            border      : false,
             autoHeight  : true,
             defaults    : {
                 anchor  : '100%'
             },
             items       : [
-
-            /* ====================== */ 
-            /* Area For Fieldset's Item (Container, Panel, Form & etc) */
-            /* ====================== */
                 {
-                    xtype       : 'fieldcontainer',
+                    xtype       : 'container',
                     layout      : 'hbox',
                     defaults    : {
-                        height  : '50',
-                        flex    : 1,
-                        padding : '2px',
-                        labelWidth  : 65    
+                        padding     : '5px',
+                        labelWidth  : 85,
+                        flex        : 1
                     },
                     items       : [
                         {
@@ -499,24 +556,17 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             allowBlank      : false,
                             msgTarget       : 'under'
                         }
-                    ]
+                    ]                    
                 },
-                {
-                    /* ====================== */ 
-                    /* Container Place */
-                    /* ====================== */
-                    xtype       : 'fieldcontainer',
+                {    
+                    xtype       : 'container',
                     layout      : 'hbox',
                     defaults    : {
-                        height  : '50',
-                        flex    : 1,
-                        padding : '2px',
-                        labelWidth  : 65    
+                        padding     : '5px',
+                        labelWidth  : 85,
+                        flex        : 1
                     },
                     items       : [
-                    /* ====================== */ 
-                    /* Area For Container's Item */
-                    /* ====================== */
                         {
                             xtype           : 'combobox',
                             name            : 'id_company',
@@ -571,13 +621,12 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                     ]
                 },
                 {
-                    xtype       : 'fieldcontainer',
+                    xtype       : 'container',
                     layout      : 'hbox',
                     defaults    : {
-                        height  : '50',
-                        flex    : 1,
-                        padding : '2px',
-                        labelWidth  : 65    
+                        padding     : '5px',
+                        labelWidth  : 85,
+                        flex        : 1
                     },
                     items       : [
                         {
@@ -591,7 +640,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             allowBlank      : false,
                             msgTarget       : 'under',
                             forceSelection  : true,
-                            action          : 'cariJT',
+                            typeAhead       : true,
                             listeners       : {
                                 buffer  : 100,
                                 change  : function(){
@@ -615,38 +664,37 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             valueField      : 'id',
                             allowBlank      : false,
                             msgTarget       : 'under',
-                            // listeners       : {
-                            //     buffer  : 100,
-                            //     change  : function(){
-                            //         var store = this.store;
-                            //         store.clearFilter();
-                            //         store.filter({
-                            //             property    : 'name',
-                            //             anyMatch    : true,
-                            //             value       : this.getValue()
-                            //         });
-                            //     }
-                            // }
+                            listeners       : {
+                                buffer  : 100,
+                                change  : function(){
+                                    var store = this.store;
+                                    store.clearFilter();
+                                    store.filter({
+                                        property    : 'name',
+                                        anyMatch    : true,
+                                        value       : this.getValue()
+                                    });
+                                }
+                            }
 
                         }
                     ]
                 },
                 {
-                    xtype       : 'fieldcontainer',
+                    xtype       : 'container',
                     layout      : 'hbox',
                     defaults    : {
-                        height  : '50',
-                        flex    : 1,
-                        padding : '2px',
-                        labelWidth  : 65    
+                        padding     : '5px',
+                        labelWidth  : 85,
+                        flex        : 1
                     },
                     items       : [
                         {
                             xtype       : 'datefield',
                             name        : 'hire',
                             fieldLabel  : 'Hire',
-                        allowBlank      : false,
-                        msgTarget       : 'under',
+                            allowBlank  : false,
+                            msgTarget   : 'under',
                             emptyText   : 'Select Hire Date'
                         },
                         {
@@ -660,13 +708,12 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                     ]
                 },
                 {
-                    xtype       : 'fieldcontainer',
+                    xtype       : 'container',
                     layout      : 'hbox',
                     defaults    : {
-                        height  : '50',
-                        flex    : 1,
-                        padding : '2px',
-                        labelWidth  : 65    
+                        padding     : '5px',
+                        labelWidth  : 85,
+                        flex        : 1
                     },
                     items       : [
                         {
@@ -683,23 +730,83 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                                     return '{code} | {fname} {lname}';
                                 }
                             }
+                        },
+                        {
+                            xtype           : 'combobox',
+                            name            : 'id_officehour',
+                            fieldLabel      : 'Shift',
+                            emptyText       : 'Select Shift',
+                            store           : Ext.create('HRIS.module.MasterHR.store.OfficeHour'),
+                            displayField    : 'name',
+                            valueField      : 'id',
+                            queryMode       : 'local',
+                            msgTarget       : 'under',
+                            listConfig      : {
+                                getInnerTpl : function(){
+                                    return '{name} ';
+                                }
+                            }
+                        },
+                    ]
+                },
+                {
+                    xtype           : 'fieldcontainer',
+                    layout          : 'hbox',
+                    defaults        : {
+                        padding : '10px',
+                        flex    : 0.5,
+                        labelWidth  : 50
+                    },
+                    items       : [
+                        {
+                            xtype       : 'checkbox',
+                            name        : 'isactive',
+                            dataIndex   : 'isactive',
+                            fieldLabel  : 'Active',
+                            anchor      : '98%',
+                            inputValue  : 'isactive',
+                            checked     : true
+                        },
+                        {
+                            xtype       : 'checkbox',
+                            name        : 'isovertime',
+                            dataIndex   : 'isovertime',
+                            fieldLabel  : 'Overtime',
+                            anchor      : '98%',
+                            inputValue  : 'isovertime'
+                        },
+                        {
+                            xtype       : 'checkbox',
+                            name        : 'isresign',
+                            dataIndex   : 'isresign',
+                            fieldLabel  : 'Resign',
+                            anchor      : '98%',
+                            inputValue  : 'isresign'
                         }
                     ]
                 }
             ]
-        },
+        }        
+    ]
+});
+
+Ext.define('HRIS.module.MasterHR.view.form.Contact',{
+    extend      : 'Ext.form.Panel',
+    alias       : 'widget.contact',
+    id          : 'contact',
+    frame       : true,
+    border      : false,
+    padding     : 3,
+    items       : [
         {
-            
-            /* ====================== */ 
-            /* Personal Information Fieldset Place */
-            /* ====================== */
             xtype       : 'fieldset',
-            title       : 'Personal Information',
+            title       : 'Company Information',
             collapsible : true,
-            collapsed   : true,
+            collapsed   : false,
+            border      : false,
             autoHeight  : true,
             defaults    : {
-                anchor  : '100%'             
+                anchor  : '100%'
             },
             items       : [
                 {
@@ -803,7 +910,7 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             tooltip         : 'Select ID Card',
                             name            : 'idcard_type',
                             xtype           : 'combobox',
-                            store           : idcard,
+                            store           : Ext.create('HRIS.module.MasterHR.store.idcard'),
                             displayField    : 'name',
                             valueField      : 'id', 
                             editable        : true,
@@ -883,45 +990,8 @@ Ext.define('HRIS.module.MasterHR.view.form.FormEmploye',{
                             flex        : 1
                         }
                     ]
-                },
-                {
-                    xtype           : 'fieldcontainer',
-                    layout          : 'hbox',
-                    defaults        : {
-                        height  : '30',
-                        padding : '10px',
-                        flex    : 1,
-                        labelWidth  : 50
-                    },
-                    items       : [
-                        {
-                            xtype       : 'checkbox',
-                            name        : 'isactive',
-                            dataIndex   : 'isactive',
-                            fieldLabel  : 'Active',
-                            anchor      : '98%',
-                            inputValue  : 'isactive',
-                            checked     : true
-                        },
-                        {
-                            xtype       : 'checkbox',
-                            name        : 'isovertime',
-                            dataIndex   : 'isovertime',
-                            fieldLabel  : 'Overtime',
-                            anchor      : '98%',
-                            inputValue  : 'isovertime'
-                        },
-                        {
-                            xtype       : 'checkbox',
-                            name        : 'isresign',
-                            dataIndex   : 'isresign',
-                            fieldLabel  : 'Resign',
-                            anchor      : '98%',
-                            inputValue  : 'isresign'
-                        }
-                    ]
                 }
             ]
-        }
+        }   
     ]
 });

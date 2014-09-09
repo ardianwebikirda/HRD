@@ -66,6 +66,24 @@ class C_province extends CI_Controller
 
     echo json_encode($data);
   }
+
+  public function chainProvince2()
+  {
+    $id       = $this->input->post('countryId');
+    $result1  = $this->m_province->chainProvince2($id);
+    $count    = $result1->num_rows();
+
+    foreach ($result1->result() as $key => $value) {
+      $data['data'][] = array(        
+        'id'            => $value->id,
+        'id_country'    => $value->id_country,
+        'code'          => $value->code,         
+        'name'          => $value->name                 
+        );
+    }
+
+    echo json_encode($data);
+  }
  
  	/*
   * Fungsi untuk menghapus data dari DB 

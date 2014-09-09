@@ -28,9 +28,12 @@ class C_employee extends CI_Controller
         'marital_status'  => $value->marital_status,
         'noc'             => $value->noc,
         'id_education'    => $value->id_education,
+        'name_education'  => $value->name_education,
         'blood'           => $value->blood,
         'photo'           => $value->photo,
         'address'         => $value->address,
+        'id_officehour'   => $value->id_officehour,
+        'name_officehour' => $value->name_officehour,
         'id_country'      => $value->id_country,
         'name_country'    => $value->name_country,
         'id_province'     => $value->id_province,
@@ -40,9 +43,13 @@ class C_employee extends CI_Controller
         'code'            => $value->code,
         'zip'             => $value->zip,
         'id_company'      => $value->id_company,
+        'name_company'    => $value->name_company,
         'id_department'   => $value->id_department,
+        'name_department' => $value->name_department,
         'id_jobtitle'     => $value->id_jobtitle,
+        'name_jobtitle'   => $value->name_jobtitle,
         'id_jobstatus'    => $value->id_jobstatus,
+        'name_jobstatus'  => $value->name_jobstatus,
         'hire'            => $value->hire,
         'expired'         => $value->expired,
         'supervisor'      => $value->supervisor,
@@ -52,6 +59,7 @@ class C_employee extends CI_Controller
         'email1'          => $value->email1,
         'email2'          => $value->email2,
         'id_bank'         => $value->id_bank,
+        'name_bank'       => $value->name_bank,
         'bank_account'    => $value->bank_account,
         'idcard_type'     => $value->idcard_type,
         'idcard_number'   => $value->idcard_number,
@@ -133,13 +141,14 @@ class C_employee extends CI_Controller
       $marital_status  = ($this->input->post('marital_status', TRUE) ? $this->input->post('marital_status', TRUE) : '');
       $noc             = ($this->input->post('noc', TRUE) ? $this->input->post('noc', TRUE) : '');
       $id_education    = ($this->input->post('id_education', TRUE) ? $this->input->post('id_education', TRUE) : '');
+      $id_officehour   = ($this->input->post('id_officehour', TRUE) ? $this->input->post('id_officehour', TRUE) : '');
       $blood           = ($this->input->post('blood', TRUE) ? $this->input->post('blood', TRUE) : '');
       $photo           = ($this->input->post('photo', TRUE) ? $this->input->post('photo', TRUE) : '');
       $address         = ($this->input->post('address', TRUE) ? $this->input->post('address', TRUE) : '');
       $id_country      = ($this->input->post('id_country', TRUE) ? $this->input->post('id_country', TRUE) : '');
       $id_province     = ($this->input->post('id_province', TRUE) ? $this->input->post('id_province', TRUE) : '');
       $id_region       = ($this->input->post('id_region', TRUE) ? $this->input->post('id_region', TRUE) : '');
-      $zip             = ($this->input->post('code', TRUE) ? $this->input->post('zip', TRUE) : '');
+      $zip             = ($this->input->post('zip', TRUE) ? $this->input->post('zip', TRUE) : '');
       $code            = ($this->input->post('code', TRUE) ? $this->input->post('code', TRUE) : '');
       $id_company      = ($this->input->post('id_company', TRUE) ? $this->input->post('id_company', TRUE) : '');
       $id_department   = ($this->input->post('id_department', TRUE) ? $this->input->post('id_department', TRUE) : '');
@@ -184,6 +193,7 @@ class C_employee extends CI_Controller
           $marital_status,
           $noc,
           $id_education,
+          $id_officehour,
           $blood,
           $photo,
           $address,
@@ -266,6 +276,7 @@ class C_employee extends CI_Controller
     $marital_status  = ($this->input->post('marital_status', TRUE) ? $this->input->post('marital_status', TRUE) : '');
     $noc             = ($this->input->post('noc', TRUE) ? $this->input->post('noc', TRUE) : '');
     $id_education    = ($this->input->post('id_education', TRUE) ? $this->input->post('id_education', TRUE) : '');
+    $id_officehour   = ($this->input->post('id_officehour', TRUE) ? $this->input->post('id_officehour', TRUE) : '');
     $blood           = ($this->input->post('blood', TRUE) ? $this->input->post('blood', TRUE) : '');
     $photo           = ($this->input->post('photo', TRUE) ? $this->input->post('photo', TRUE) : '');
     $address         = ($this->input->post('address', TRUE) ? $this->input->post('address', TRUE) : '');
@@ -315,6 +326,7 @@ class C_employee extends CI_Controller
         $marital_status,
         $noc,
         $id_education,
+        $id_officehour,
         $blood,
         $photo,
         $address,
@@ -354,13 +366,15 @@ class C_employee extends CI_Controller
   public function searchEmployee()
   {
     $name     = ($this->input->post('name', TRUE) ? $this->input->post('name', TRUE) : '');
-    $result = $this->m_employee->searchGridEmployee($name);
+    $result   = $this->m_employee->searchGridEmployee($name);
     foreach ($result->result() as $key => $value) {
       $data['data'][] = array(        
-        'id'          => $value->id,
-        'code'        => $value->code,        
-        'fname'        => $value->fname,
-        'lname'        => $value->lname    
+        'id'                => $value->id,
+        'code'              => $value->code,        
+        'fname'             => $value->fname,
+        'lname'             => $value->lname,
+        'name_company'      => $value->name_company,
+        'name_department'   => $value->name_department,    
         );
     }
         $data['success'] = TRUE;

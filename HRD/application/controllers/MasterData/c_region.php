@@ -139,14 +139,30 @@ class C_region extends CI_Controller
     foreach ($result1->result() as $key => $value) {
       $data['data'][] = array(        
         'id'            => $value->id,
+        'id_province'   => $value->id_province,
         'code'          => $value->code,         
         'name'          => $value->name                
-           
-        );
+      );
     }
 
-    // $data['total']   = $count;
-    $data['success'] = true;
+    echo json_encode($data);
+  }
+
+  public function chainRegion2()
+  {
+    $id       = $this->input->post('provinceId');
+    $result1  = $this->m_region->chainRegion2($id);
+    $count    = $result1->num_rows();
+
+    foreach ($result1->result() as $key => $value) {
+      $data['data'][] = array(        
+        'id'            => $value->id,
+        'id_province'   => $value->id_province,
+        'code'          => $value->code,         
+        'name'          => $value->name                
+      );
+    }
+
     echo json_encode($data);
   }
 

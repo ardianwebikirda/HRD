@@ -30,7 +30,10 @@ class M_employee extends CI_Model
             se.bod AS bod, 
             se.marital_status AS marital_status, 
             se.noc AS noc,             
-            se.id_education AS id_education, 
+            se.id_education AS id_education,
+            sed.name AS name_education,
+            se.id_officehour AS id_officehour,
+            ofh.name AS name_officehour, 
             se.blood AS blood, 
             se.photo AS photo, 
             se.address AS address, 
@@ -43,9 +46,13 @@ class M_employee extends CI_Model
             se.zip AS zip, 
             se.code AS code, 
             se.id_company AS id_company, 
-            se.id_department AS id_department,             
-            se.id_jobtitle AS id_jobtitle, 
+            sco.name AS name_company,
+            se.id_department AS id_department,
+            sdep.name AS name_department,             
+            se.id_jobtitle AS id_jobtitle,
+            sjt.name AS name_jobtitle, 
             se.id_jobstatus AS id_jobstatus, 
+            sjs.name AS name_jobstatus, 
             se.hire AS hire, 
             se.expired AS expired, 
             se.supervisor AS supervisor,             
@@ -54,18 +61,32 @@ class M_employee extends CI_Model
             se.mobile2 AS mobile2, 
             se.email1 AS email1, 
             se.email2 AS email2, 
-            se.id_bank AS id_bank,             
+            se.id_bank AS id_bank,
+            sb.name AS name_bank,             
             se.bank_account AS bank_account, 
             se.idcard_type AS idcard_type, 
             se.idcard_number AS idcard_number, 
-            se.tax AS tax,             
-            se.isactive AS isactive, CASE WHEN isactive = 'Y' THEN 1 ELSE 0 END AS isactive,
-            se.isovertime AS isovertime, CASE WHEN isovertime = 'Y' THEN 1 ELSE 0 END AS isovertime,
-            se.isresign AS isresign, CASE WHEN isresign = 'Y' THEN 1 ELSE 0 END AS isresign", FALSE);
+            se.tax AS tax, 
+
+            se.isactive AS isactive, 
+            CASE WHEN se.isactive = 'Y' THEN 1 ELSE 0 END AS isactive,
+
+            se.isovertime AS isovertime, 
+            CASE WHEN se.isovertime = 'Y' THEN 1 ELSE 0 END AS isovertime,
+
+            se.isresign AS isresign, 
+            CASE WHEN se.isresign = 'Y' THEN 1 ELSE 0 END AS isresign", FALSE);
         $this->db->from('sys_employee se');
         $this->db->join('sys_country sc','se.id_country=sc.id_country','left');
         $this->db->join('sys_province sp','se.id_province=sp.id_province','left');
         $this->db->join('sys_region sr','se.id_region=sr.id_region','left');
+        $this->db->join('sys_officehour ofh','se.id_officehour = ofh.id_officehour','left');
+        $this->db->join('sys_company sco','se.id_company = sco.id_company','left');
+        $this->db->join('sys_department sdep','se.id_department = sdep.id_department','left');
+        $this->db->join('sys_bank sb','se.id_bank = sb.id_bank','left');
+        $this->db->join('sys_jobtitle sjt','se.id_jobtitle = sjt.id_jobtitle','left');
+        $this->db->join('sys_jobstatus sjs','se.id_jobstatus = sjs.id_jobstatus','left');
+        $this->db->join('sys_education sed','se.id_education = sed.id_education','left');
         $this->db->order_by('fname');
         $this->db->limit($offset, $limit);
         $query = $this->db->get();
@@ -81,46 +102,73 @@ class M_employee extends CI_Model
     {
        
       $this->db->select("
-            id_employee AS id, 
-            fname AS fname, 
-            lname AS lname, 
-            username AS username, 
-            gender AS gender,             
-            id_religion AS id_religion, 
-            bod_place AS bod_place, 
-            bod AS bod, 
-            marital_status AS marital_status, 
-            noc AS noc,             
-            id_education AS id_education, 
-            blood AS blood, 
-            photo AS photo, 
-            address AS address, 
-            id_country AS id_country,             
-            id_province AS id_province, 
-            id_region AS id_region, 
-            zip AS zip, 
-            code AS code, 
-            id_company AS id_company, 
-            id_department AS id_department,             
-            id_jobtitle AS id_jobtitle, 
-            id_jobstatus AS id_jobstatus, 
-            hire AS hire, 
-            expired AS expired, 
-            supervisor AS supervisor,             
-            phone AS phone, 
-            mobile1 AS mobile1, 
-            mobile2 AS mobile2, 
-            email1 AS email1, 
-            email2 AS email2, 
-            id_bank AS id_bank,             
-            bank_account AS bank_account, 
-            idcard_type AS idcard_type, 
-            idcard_number AS idcard_number, 
-            tax AS tax,             
-            isactive AS isactive, CASE WHEN isactive = 'Y' THEN 1 ELSE 0 END AS isactive,
-            isovertime AS isovertime, CASE WHEN isovertime = 'Y' THEN 1 ELSE 0 END AS isovertime,
-            isresign AS isresign, CASE WHEN isresign = 'Y' THEN 1 ELSE 0 END AS isresign", FALSE);
-        $this->db->from('sys_employee');
+            se.id_employee AS id, 
+            se.fname AS fname, 
+            se.lname AS lname, 
+            se.username AS username, 
+            se.gender AS gender,             
+            se.id_religion AS id_religion, 
+            se.bod_place AS bod_place, 
+            se.bod AS bod, 
+            se.marital_status AS marital_status, 
+            se.noc AS noc,             
+            se.id_education AS id_education,
+            sed.name AS name_education,
+            se.id_officehour AS id_officehour,
+            ofh.name AS name_officehour, 
+            se.blood AS blood, 
+            se.photo AS photo, 
+            se.address AS address, 
+            se.id_country AS id_country,
+            sc.name AS name_country,             
+            se.id_province AS id_province,
+            sp.name AS name_province, 
+            se.id_region AS id_region,
+            sr.name AS name_region,  
+            se.zip AS zip, 
+            se.code AS code, 
+            se.id_company AS id_company, 
+            sco.name AS name_company,
+            se.id_department AS id_department,
+            sdep.name AS name_department,             
+            se.id_jobtitle AS id_jobtitle,
+            sjt.name AS name_jobtitle, 
+            se.id_jobstatus AS id_jobstatus, 
+            sjs.name AS name_jobstatus, 
+            se.hire AS hire, 
+            se.expired AS expired, 
+            se.supervisor AS supervisor,             
+            se.phone AS phone, 
+            se.mobile1 AS mobile1, 
+            se.mobile2 AS mobile2, 
+            se.email1 AS email1, 
+            se.email2 AS email2, 
+            se.id_bank AS id_bank,
+            sb.name AS name_bank,             
+            se.bank_account AS bank_account, 
+            se.idcard_type AS idcard_type, 
+            se.idcard_number AS idcard_number, 
+            se.tax AS tax, 
+
+            se.isactive AS isactive, 
+            CASE WHEN se.isactive = 'Y' THEN 1 ELSE 0 END AS isactive,
+
+            se.isovertime AS isovertime, 
+            CASE WHEN se.isovertime = 'Y' THEN 1 ELSE 0 END AS isovertime,
+
+            se.isresign AS isresign, 
+            CASE WHEN se.isresign = 'Y' THEN 1 ELSE 0 END AS isresign", FALSE);
+        $this->db->from('sys_employee se');
+        $this->db->join('sys_country sc','se.id_country=sc.id_country','left');
+        $this->db->join('sys_province sp','se.id_province=sp.id_province','left');
+        $this->db->join('sys_region sr','se.id_region=sr.id_region','left');
+        $this->db->join('sys_officehour ofh','se.id_officehour = ofh.id_officehour','left');
+        $this->db->join('sys_company sco','se.id_company = sco.id_company','left');
+        $this->db->join('sys_department sdep','se.id_department = sdep.id_department','left');
+        $this->db->join('sys_bank sb','se.id_bank = sb.id_bank','left');
+        $this->db->join('sys_jobtitle sjt','se.id_jobtitle = sjt.id_jobtitle','left');
+        $this->db->join('sys_jobstatus sjs','se.id_jobstatus = sjs.id_jobstatus','left');
+        $this->db->join('sys_education sed','se.id_education = sed.id_education','left');
         $this->db->order_by('fname');
         $query = $this->db->get();
         // echo $this->db->last_query(); <-- This Query Can Activated for test parsing parameter
@@ -159,6 +207,7 @@ class M_employee extends CI_Model
           $marital_status,
           $noc,
           $id_education,
+          $id_officehour,
           $blood,
           $photo,
           $address,
@@ -200,6 +249,7 @@ class M_employee extends CI_Model
         $this->db->set('marital_status', $marital_status);
         $this->db->set('noc', $noc);
         $this->db->set('id_education', $id_education);
+        $this->db->set('id_officehour', $id_officehour);
         $this->db->set('blood', $blood);
         $this->db->set('photo', $photo);
         $this->db->set('address', $address);
@@ -339,6 +389,7 @@ class M_employee extends CI_Model
         $marital_status,
         $noc,
         $id_education,
+        $id_officehour,
         $blood,
         $photo,
         $address,
@@ -382,6 +433,7 @@ class M_employee extends CI_Model
                         'marital_status'    => $marital_status,
                         'noc'               => $noc,
                         'id_education'      => $id_education,
+                        'id_officehour'     => $id_officehour,
                         'blood'             => $blood,
                         'photo'             => $photo,
                         'address'           => $address,
@@ -422,12 +474,79 @@ class M_employee extends CI_Model
     */ 
     public function searchGridEmployee($name)
     {
-        $this->db->select("sse.id_employee AS id, sse.code AS code, sse.fname AS fname, sse.lname AS lname, 
-            sse.isactive AS isactive, CASE WHEN sse.isactive = 'Y' THEN 1 ELSE 0 END AS isactive", FALSE);
-        $this->db->from('sys_employee sse');
-        $this->db->like('LOWER(sse.code)', strtolower($name));
-        $this->db->or_like('LOWER(sse.fname)', strtolower($name));
-        $this->db->or_like('LOWER(sse.lname)', strtolower($name));
+       $this->db->select("
+            se.id_employee AS id, 
+            se.fname AS fname, 
+            se.lname AS lname, 
+            se.username AS username, 
+            se.gender AS gender,             
+            se.id_religion AS id_religion, 
+            se.bod_place AS bod_place, 
+            se.bod AS bod, 
+            se.marital_status AS marital_status, 
+            se.noc AS noc,             
+            se.id_education AS id_education,
+            sed.name AS name_education,
+            se.id_officehour AS id_officehour,
+            ofh.name AS name_officehour, 
+            se.blood AS blood, 
+            se.photo AS photo, 
+            se.address AS address, 
+            se.id_country AS id_country,
+            sc.name AS name_country,             
+            se.id_province AS id_province,
+            sp.name AS name_province, 
+            se.id_region AS id_region,
+            sr.name AS name_region,  
+            se.zip AS zip, 
+            se.code AS code, 
+            se.id_company AS id_company, 
+            sco.name AS name_company,
+            se.id_department AS id_department,
+            sdep.name AS name_department,             
+            se.id_jobtitle AS id_jobtitle,
+            sjt.name AS name_jobtitle, 
+            se.id_jobstatus AS id_jobstatus, 
+            sjs.name AS name_jobstatus, 
+            se.hire AS hire, 
+            se.expired AS expired, 
+            se.supervisor AS supervisor,             
+            se.phone AS phone, 
+            se.mobile1 AS mobile1, 
+            se.mobile2 AS mobile2, 
+            se.email1 AS email1, 
+            se.email2 AS email2, 
+            se.id_bank AS id_bank,
+            sb.name AS name_bank,             
+            se.bank_account AS bank_account, 
+            se.idcard_type AS idcard_type, 
+            se.idcard_number AS idcard_number, 
+            se.tax AS tax, 
+
+            se.isactive AS isactive, 
+            CASE WHEN se.isactive = 'Y' THEN 1 ELSE 0 END AS isactive,
+
+            se.isovertime AS isovertime, 
+            CASE WHEN se.isovertime = 'Y' THEN 1 ELSE 0 END AS isovertime,
+
+            se.isresign AS isresign, 
+            CASE WHEN se.isresign = 'Y' THEN 1 ELSE 0 END AS isresign", FALSE);
+        $this->db->from('sys_employee se');
+        $this->db->join('sys_country sc','se.id_country=sc.id_country','left');
+        $this->db->join('sys_province sp','se.id_province=sp.id_province','left');
+        $this->db->join('sys_region sr','se.id_region=sr.id_region','left');
+        $this->db->join('sys_officehour ofh','se.id_officehour = ofh.id_officehour','left');
+        $this->db->join('sys_company sco','se.id_company = sco.id_company','left');
+        $this->db->join('sys_department sdep','se.id_department = sdep.id_department','left');
+        $this->db->join('sys_bank sb','se.id_bank = sb.id_bank','left');
+        $this->db->join('sys_jobtitle sjt','se.id_jobtitle = sjt.id_jobtitle','left');
+        $this->db->join('sys_jobstatus sjs','se.id_jobstatus = sjs.id_jobstatus','left');
+        $this->db->join('sys_education sed','se.id_education = sed.id_education','left');
+        $this->db->like('LOWER(se.code)', strtolower($name));
+        $this->db->or_like('LOWER(se.fname)', strtolower($name));
+        $this->db->or_like('LOWER(se.lname)', strtolower($name));
+        $this->db->or_like('LOWER(sco.name)', strtolower($name));
+        $this->db->or_like('LOWER(sdep.name)', strtolower($name));
         $this->db->order_by('code');
         $query = $this->db->get();
         return $query;

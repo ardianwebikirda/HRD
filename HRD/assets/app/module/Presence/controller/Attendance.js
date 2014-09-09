@@ -38,6 +38,12 @@ Ext.define('HRIS.module.Presence.controller.Attendance', {
             "formattendance  #id_jobtitle"     : {
                 select: me.cariJT
             },
+            "gridupload  button[action=dumping]"    : {
+                click: me.dumping
+            },
+            "uploadform button[action=dump]"    : {
+                click: me.dump
+            },  
             "griddepartment2"    : {
                 itemdblclick: me.addDepartment2
             }, 
@@ -56,6 +62,12 @@ Ext.define('HRIS.module.Presence.controller.Attendance', {
         me.getStore('HRIS.module.Presence.store.Attendance').reload();
         // me.getStore('HRIS.module.Presence.store.Department2').reload();
     },
+
+    dumping: function(btn){
+        Ext.create('HRIS.module.Presence.view.form.UploadForm').show();
+       // console.log('hai');
+    },
+
     groupAttendance: function(me, record, item, index, e, eOpts) {//Edit
         var form = Ext.getCmp('formattendance');
         form.getForm().setValues(record.data);
@@ -169,7 +181,7 @@ Ext.define('HRIS.module.Presence.controller.Attendance', {
         var isovertime      = form.findField('isovertime').getValue();
         var isresign        = form.findField('isresign').getValue();
         // console.log('hai');
-        console.log(marital_status, noc, idcard_type, idcard_number);
+        // console.log(marital_status, noc, idcard_type, idcard_number);
         Ext.Ajax.request({
             url     : BASE_URL + 'Presence/c_attendance/saveAttendance',
             method  : 'POST',
@@ -518,15 +530,43 @@ Ext.define('HRIS.module.Presence.controller.Attendance', {
         comboRegion.setDisabled(false);
     },
 
-    cariJT : function(combo, records, index){
-        var me = this;
-        var store = me.getStore('HRIS.module.Presence.store.JobTitle').reload();
-        store.clearFilter();
-        store.filter({
-            property    : 'name',
-            anyMatch    : true,
-            value       : this.getValue()
-        });
-    }
 
+    //CONTROLLER UPLOAD EXCEL DISNI 
+    dump : function(btn, evt, opts){
+        var me      = this;
+        var win     = btn.up('window');
+        var form    = win.down('form').getForm();
+        var dateatt = form.findField('dateatt').getValue();
+        var csvfile = form.findField('csvfile').getValue();
+        console.log('hai');
+        console.log(dateatt, csvfile, form);
+        if(form.isValid()){
+            form.submit({
+                url     : BASE_URL + 'Presence/c_attendance/upload',
+                params  : {
+                    dateatt : dateatt,
+                    csvfile : csvfile
+                },
+                waitMsg : 'Uploading Attendance....',
+                success : function(fp, o){
+                    var msg     = 'Upload'+ o.result.filename +'Is Success';
+                    var icon    = Ext.MessageBox.INFO;
+                    if(!o.result.status){
+                        var msg     = 'Upload is Failed Check Your File (max 2 MB, ext *.csv)';
+                        var icon    = Ext.MessageBox.ERROR;
+                    } else {
+                        me.showMessage({
+                            title  : 'MESSAGE',
+                            msg    : msg,
+                            icon   : icon,
+                            buttons: Ext.MessageBox.OK
+                        });
+                        // me.getStore('Com.GatotKaca.ERP.module.HumanResources.store.UploadAttendance').removeAll();
+                        // me.reloadUploadStore();
+                    }
+                    btn.up('window').close();
+                }
+            });            
+        }
+    }
 });

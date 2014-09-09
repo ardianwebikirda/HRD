@@ -25,13 +25,7 @@ Ext.define('HRIS.module.Presence.view.form.FormAttendance',{
             text    : 'Reset',
             iconCls : 'icon-error',
             action  : 'reset'
-        },
-        {
-			xtype 		: 'button',
-			text 		: 'Dumping From Excel',
-			iconCls		: 'icon-database_yellow_start',
-			action 		: 'dumping'
-		}
+        }
     ],
 	items 		: [
 		{
@@ -62,6 +56,7 @@ Ext.define('HRIS.module.Presence.view.form.FormAttendance',{
 						{
                             xtype       : 'checkbox',
                             name        : 'absence',
+                            id        	: 'absence',
                             dataIndex   : 'absence',
                             fieldLabel  : 'Absence',
                             anchor      : '98%',
@@ -108,8 +103,8 @@ Ext.define('HRIS.module.Presence.view.form.FormAttendance',{
 				},
 				{
 					xtype 		: 'fieldcontainer',
-					layour 		: 'hbox',
-					defaults 	: {
+					layout 		: 'hbox',
+					defaults	: {
 						labelWidth 	: 85,
 						padding 	: '3px',
 						flex 		: 1
@@ -123,7 +118,17 @@ Ext.define('HRIS.module.Presence.view.form.FormAttendance',{
 							store 			: reason,
 							queryMode 		: 'local',
 							displayField	: 'name',
+	     					anchor 			: '100%',
+	     					margin 			: '2px 35px 2px 2px',
 							valueField 		: 'id'
+						},
+						{
+							xtype			: 'textfield',
+							fieldLabel 		: 'Description',
+							name 			: 'desc',
+	     					margin 			: '2px 20px 2px 2px',
+	     					anchor 			: '100%',
+							emptyText 		: 'Description'
 						}
 					]
 				}

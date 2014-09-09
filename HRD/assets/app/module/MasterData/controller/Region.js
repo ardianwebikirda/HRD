@@ -142,7 +142,7 @@ Ext.define('HRIS.module.MasterData.controller.Region', {
         });   
     },
     edit: function(grid, record, item, index, e, eOpts){
-        this.getStore('HRIS.module.MasterData.store.MinProvince').load();
+        this.getStore('HRIS.module.MasterData.store.UpdateProvince').reload();
         var win = Ext.create('HRIS.module.MasterData.view.form.FormEditRegion');
         win.show();
         win.down('form').loadRecord(record);

@@ -2,17 +2,10 @@ Ext.define('HRIS.module.Presence.view.grid.GridAttEmployee',{
 	extend 		: 'Ext.grid.Panel',
 	title		: 'List Employee',
 	alias 		: 'widget.gridattemployee',
-	store 		: 'HRIS.module.Presence.store.AttEmployee',
+	store 		: Ext.create('HRIS.module.MasterHR.store.Employee'),
 	id 			: 'gridattemployee',
 	iconCls		: 'icon-application_view_columns',
 	margins 	: '1px 1px 1px 1px',
-	selModel 	: {
-		selType 	: 'checkboxmodel',
-		mode 		: 'MULTI',
-		checkOnly	: true,
-		width		: '3%',
-		action 		: 'selected'
-	},
 	dockedItems		: [{
 			xtype			: 'pagingtoolbar',
 			store 			: 'HRIS.module.Presence.store.AttEmployee',
@@ -28,7 +21,7 @@ Ext.define('HRIS.module.Presence.view.grid.GridAttEmployee',{
 		{
 			text 		: 'CODE',
 			dataIndex	: 'code',
-			width		: '15%'
+			width		: '20%'
 		},
 		{
 			text 		: 'FIRST NAME',
@@ -42,7 +35,7 @@ Ext.define('HRIS.module.Presence.view.grid.GridAttEmployee',{
 		}
 	],
 	tbar		: [
-		{xtype : 'button', text : 'Delete', iconCls : 'icon-delete', action : 'delete'},
+		// {xtype : 'button', text : 'Delete', iconCls : 'icon-delete', action : 'delete'},
 		'->',
 		{
 			xtype			: 'textfield',

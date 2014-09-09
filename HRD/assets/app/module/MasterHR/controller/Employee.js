@@ -7,9 +7,12 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var me = this;
         me.getStore('HRIS.module.MasterHR.store.Employee').load();
         me.control({
-            "#gridemployee"                          : {
-               itemclick: me.groupEmployee
+            "gridemployee"                          : {
+               itemdblclick: me.edit
             },
+            "gridemployee  button[action=add]"       : {
+                click: me.add
+            }, 
             "gridemployee  button[action=delete]"    : {
                 click: me.del
             },  
@@ -22,7 +25,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
             "formemployee  button[action=save]"      : {
                 click: me.save
             },
-            "formemployee button[action=update]"     : {
+            "formeditemployee button[action=update]"     : {
                click: me.update
             }, 
             "formemployee  button[action=reset]"     : {
@@ -31,11 +34,11 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
             "formemployee #id_country"               : {
                 select: me.loadComboProvince
             },
-            "formemployee #id_province"               : {
+            "formemployee #id_province"              : {
                 select: me.loadComboRegion
             },
             "formemployee  #id_jobtitle"     : {
-                select: me.cariJT
+                keypress: me.cariJT
             },
             "griddepartment2"    : {
                 itemdblclick: me.addDepartment2
@@ -53,24 +56,11 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
     reloadStore: function(){
         var me = this;
         me.getStore('HRIS.module.MasterHR.store.Employee').reload();
-        // me.getStore('HRIS.module.MasterHR.store.Department2').reload();
     },
-    groupEmployee: function(me, record, item, index, e, eOpts) {//Edit
-        var form = Ext.getCmp('formemployee');
-        form.getForm().setValues(record.data);
-        var saveButton = form.down('button[action=save]');
-        saveButton.setDisabled(true);
-
-        var updateButton = form.down('button[action=update]');
-        updateButton.setDisabled(false);
-
-        var comboProvince = Ext.ComponentQuery.query('formemployee #id_province')[0];
-        comboProvince.setDisabled(false);
-
-        var comboRegion = Ext.ComponentQuery.query('formemployee #id_region')[0];
-        comboRegion.setDisabled(false);
-
-
+    add: function(){
+        var me = this;
+        me.getStore('HRIS.module.MasterData.store.AllRegion').reload();
+        Ext.create('HRIS.module.MasterHR.view.form.FormEmployee').show();
     },
 
     del: function(gridPanel, selected){
@@ -128,7 +118,8 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
     },
     save: function(btn, evt, opts){
         var me              = this;
-        var form            = btn.up('formemployee').getForm();
+        var win             = btn.up('window');
+        var form            = win.down('form').getForm();
         var fname           = form.findField('fname').getValue();
         var lname           = form.findField('lname').getValue();
         var username        = form.findField('username').getValue();
@@ -139,6 +130,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var marital_status  = form.findField('marital_status').getValue();
         var noc             = form.findField('noc').getValue();
         var id_education    = form.findField('id_education').getValue();
+        var id_officehour   = form.findField('id_officehour').getValue();
         var blood           = form.findField('blood').getValue();
         var photo           = form.findField('photo').getValue();
         var address         = form.findField('address').getValue();
@@ -168,7 +160,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var isovertime      = form.findField('isovertime').getValue();
         var isresign        = form.findField('isresign').getValue();
         // console.log('hai');
-        console.log(marital_status, noc, idcard_type, idcard_number);
+        console.log(zip, code);
         Ext.Ajax.request({
             url     : BASE_URL + 'MasterHR/c_employee/saveEmployee',
             method  : 'POST',
@@ -183,6 +175,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
                 marital_status  : marital_status,
                 noc             : noc,
                 id_education    : id_education,
+                id_officehour   : id_officehour,
                 blood           : blood,
                 photo           : photo,
                 address         : address,
@@ -221,7 +214,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
                         icon            : Ext.MessageBox.INFO,
                         buttons         : Ext.MessageBox.OK
                     });
-                    // win.close();
+                    win.close();
                     me.reset();
                     me.getStore('HRIS.module.MasterHR.store.Employee').removeAll();
                     me.getStore('HRIS.module.MasterHR.store.Employee').reload();
@@ -243,9 +236,28 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
             }
         });   
     },
+
+    edit: function(grid, record, item, index, e, eOpts){
+        // this.getStore('HRIS.module.MasterData.store.MinRegion').load();
+        this.getStore('HRIS.module.MasterHR.store.Employee').reload();
+        this.getStore('HRIS.module.MasterHR.store.Company').reload();
+        this.getStore('HRIS.module.MasterHR.store.Department').reload();
+        this.getStore('HRIS.module.MasterHR.store.JobTitle').reload();
+        this.getStore('HRIS.module.MasterHR.store.JobStatus').reload();
+        this.getStore('HRIS.module.MasterHR.store.OfficeHour').reload();
+        this.getStore('HRIS.module.MasterData.store.MinCountry').reload();
+        this.getStore('HRIS.module.MasterData.store.MinProvince').reload();
+        this.getStore('HRIS.module.MasterData.store.Education').reload();
+        this.getStore('HRIS.module.MasterData.store.Bank').reload();
+        var win = Ext.create('HRIS.module.MasterHR.view.form.FormEditEmployee');
+        win.show();
+        win.down('form').loadRecord(record);
+    },
+
     update: function(btn){
         var me              = this;
-        var form            = btn.up('formemployee').getForm();
+        var win             = btn.up('window');
+        var form            = win.down('form').getForm();
         var id              = form.findField('id').getValue();
         var fname           = form.findField('fname').getValue();
         var lname           = form.findField('lname').getValue();
@@ -257,6 +269,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var marital_status  = form.findField('marital_status').getValue();
         var noc             = form.findField('noc').getValue();
         var id_education    = form.findField('id_education').getValue();
+        var id_officehour   = form.findField('id_officehour').getValue();
         var blood           = form.findField('blood').getValue();
         var photo           = form.findField('photo').getValue();
         var address         = form.findField('address').getValue();
@@ -285,7 +298,8 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
         var isactive        = form.findField('isactive').getValue();
         var isovertime      = form.findField('isovertime').getValue();
         var isresign        = form.findField('isresign').getValue();
-        // console.log(id);
+        console.log('bank:',id_bank, ' | Shift:',id_officehour, ' |jobstat:',id_jobstatus, ' |jobtit:',id_jobtitle, ' |Comp:',id_company, 
+            ' |dept:',id_department, ' |Count:',id_country, ' |prov:',id_province, ' |reg:',id_region);
         Ext.MessageBox.show({
             title           : 'Konfirmasi',
             msg             : 'Anda yakin akan merubah data?',
@@ -309,6 +323,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
                             marital_status  : marital_status,
                             noc             : noc,
                             id_education    : id_education,
+                            id_officehour   : id_officehour,
                             blood           : blood,
                             photo           : photo,
                             address         : address,
@@ -348,8 +363,7 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
                                     icon            : Ext.MessageBox.INFO,
                                     buttons         : Ext.MessageBox.OK
                                 });
-                                // win.close();
-                                me.reset();
+                                win.close();
                                 me.getStore('HRIS.module.MasterHR.store.Employee').removeAll();
                                 me.getStore('HRIS.module.MasterHR.store.Employee').reload();
                             }else if (data.total === 2){
@@ -511,21 +525,10 @@ Ext.define('HRIS.module.MasterHR.controller.Employee', {
 
         var comboProvince   = Ext.ComponentQuery.query('formemployee #id_province')[0];
         provinceId          = comboProvince.getValue();
+        console.log(provinceId);
         comboRegion.store.load({
             params  : { provinceId : provinceId }
         });
         comboRegion.setDisabled(false);
     },
-
-    cariJT : function(combo, records, index){
-        var me = this;
-        var store = me.getStore('HRIS.module.MasterHR.store.JobTitle').reload();
-        store.clearFilter();
-        store.filter({
-            property    : 'name',
-            anyMatch    : true,
-            value       : this.getValue()
-        });
-    }
-
 });
